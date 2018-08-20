@@ -6,26 +6,23 @@ using System.Web;
 
 namespace SAT.ConsultaCFDI
 {
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name = "Acuse", Namespace = "http://schemas.datacontract.org/2004/07/Sat.Cfdi.Negocio.ConsultaCfdi.Servicio")]
-    [System.SerializableAttribute()]    
     public partial class Acuse
     {
 
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [DataMember]
         private string CodigoEstatusField;
 
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [DataMember]
         private string EsCancelableField;
 
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [DataMember]
         private string EstadoField;
 
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        [DataMember]
         private string EstatusCancelacionField;
 
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember]
         internal string CodigoEstatus
         {
             get
@@ -41,7 +38,7 @@ namespace SAT.ConsultaCFDI
             }
         }
 
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember]
         internal string EsCancelable
         {
             get
@@ -57,7 +54,7 @@ namespace SAT.ConsultaCFDI
             }
         }
 
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember]
         internal string Estado
         {
             get
@@ -73,7 +70,7 @@ namespace SAT.ConsultaCFDI
             }
         }
 
-        [System.Runtime.Serialization.DataMemberAttribute()]
+        [DataMember]
         internal string EstatusCancelacion
         {
             get
