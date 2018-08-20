@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.Services", "SAT.Services.csproj", "{44D7B100-6EAF-47C3-9E42-699BF0953A7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.CancelaCFD", "SAT.CancelaCFD\SAT.CancelaCFD.csproj", "{1A29102E-4A26-4957-BB71-9145E6FB1D5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.Core", "SAT.Core\SAT.Core.csproj", "{555B51D8-9BF2-4E27-B9E0-89AC2845D563}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.ConsultaCFDI", "SAT.ConsultaCFDI\SAT.ConsultaCFDI.csproj", "{BB5CD776-C385-4684-9D5E-657AFE2DF06E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.RecibeCFDI", "SAT.RecibeCFDI\SAT.RecibeCFDI.csproj", "{15533B47-2375-470E-9A9F-9D8A9B5DEB9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.AceptacionRechazo", "SAT.AceptacionRechazo\SAT.AceptacionRechazo.csproj", "{10B30A6F-A660-453D-A132-4AE44B130765}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.CfdiConsultaRelacionados", "SAT.CfdiConsultaRelacionados\SAT.CfdiConsultaRelacionados.csproj", "{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44D7B100-6EAF-47C3-9E42-699BF0953A7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44D7B100-6EAF-47C3-9E42-699BF0953A7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44D7B100-6EAF-47C3-9E42-699BF0953A7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44D7B100-6EAF-47C3-9E42-699BF0953A7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A29102E-4A26-4957-BB71-9145E6FB1D5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A29102E-4A26-4957-BB71-9145E6FB1D5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A29102E-4A26-4957-BB71-9145E6FB1D5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A29102E-4A26-4957-BB71-9145E6FB1D5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{555B51D8-9BF2-4E27-B9E0-89AC2845D563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{555B51D8-9BF2-4E27-B9E0-89AC2845D563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{555B51D8-9BF2-4E27-B9E0-89AC2845D563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{555B51D8-9BF2-4E27-B9E0-89AC2845D563}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB5CD776-C385-4684-9D5E-657AFE2DF06E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB5CD776-C385-4684-9D5E-657AFE2DF06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB5CD776-C385-4684-9D5E-657AFE2DF06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB5CD776-C385-4684-9D5E-657AFE2DF06E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15533B47-2375-470E-9A9F-9D8A9B5DEB9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15533B47-2375-470E-9A9F-9D8A9B5DEB9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15533B47-2375-470E-9A9F-9D8A9B5DEB9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15533B47-2375-470E-9A9F-9D8A9B5DEB9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10B30A6F-A660-453D-A132-4AE44B130765}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10B30A6F-A660-453D-A132-4AE44B130765}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10B30A6F-A660-453D-A132-4AE44B130765}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10B30A6F-A660-453D-A132-4AE44B130765}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1DF26B10-21C8-406D-9205-8EBBC5397412}
+	EndGlobalSection
+EndGlobal

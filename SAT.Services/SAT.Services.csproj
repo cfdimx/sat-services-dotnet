@@ -1,0 +1,158 @@
+﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{44D7B100-6EAF-47C3-9E42-699BF0953A7E}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SAT.Services</RootNamespace>
+    <AssemblyName>SAT.Services</AssemblyName>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
+    <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CancelaCFDService.svc" />
+    <Content Include="CancelationAceptacionRechazoService.svc" />
+    <Content Include="CfdiConsultaRelacionadosService.svc" />
+    <Content Include="ConsultaCFDIService.svc" />
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CancelaCFDService.svc.cs">
+      <DependentUpon>CancelaCFDService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="CancelationAceptacionRechazoService.svc.cs">
+      <DependentUpon>CancelationAceptacionRechazoService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="CfdiConsultaRelacionadosService.svc.cs">
+      <DependentUpon>CfdiConsultaRelacionadosService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ConsultaCFDIService.svc.cs">
+      <DependentUpon>ConsultaCFDIService.svc</DependentUpon>
+    </Compile>
+    <Compile Include="ICancelaCFDService.cs" />
+    <Compile Include="ICancelationAceptacionRechazoService.cs" />
+    <Compile Include="ICfdiConsultaRelacionadosService.cs" />
+    <Compile Include="IConsultaCFDIService.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="SAT.AceptacionRechazo\SAT.AceptacionRechazo.csproj">
+      <Project>{10b30a6f-a660-453d-a132-4ae44b130765}</Project>
+      <Name>SAT.AceptacionRechazo</Name>
+    </ProjectReference>
+    <ProjectReference Include="SAT.CancelaCFD\SAT.CancelaCFD.csproj">
+      <Project>{1a29102e-4a26-4957-bb71-9145e6fb1d5e}</Project>
+      <Name>SAT.CancelaCFD</Name>
+    </ProjectReference>
+    <ProjectReference Include="SAT.CfdiConsultaRelacionados\SAT.CfdiConsultaRelacionados.csproj">
+      <Project>{5aa844e1-b2df-4f6e-884b-8ce5b57632e3}</Project>
+      <Name>SAT.CfdiConsultaRelacionados</Name>
+    </ProjectReference>
+    <ProjectReference Include="SAT.ConsultaCFDI\SAT.ConsultaCFDI.csproj">
+      <Project>{bb5cd776-c385-4684-9d5e-657afe2df06e}</Project>
+      <Name>SAT.ConsultaCFDI</Name>
+    </ProjectReference>
+    <ProjectReference Include="SAT.Core\SAT.Core.csproj">
+      <Project>{555b51d8-9bf2-4e27-b9e0-89ac2845d563}</Project>
+      <Name>SAT.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="SAT.RecibeCFDI\SAT.RecibeCFDI.csproj">
+      <Project>{15533b47-2375-470e-9a9f-9d8a9b5deb9e}</Project>
+      <Name>SAT.RecibeCFDI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>65044</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:65044/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

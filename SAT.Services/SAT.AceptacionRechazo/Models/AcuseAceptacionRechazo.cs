@@ -1,0 +1,109 @@
+﻿using SAT.Core;
+
+namespace SAT.AceptacionRechazo
+{
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://cancelacfd.sat.gob.mx")]
+    public partial class AcuseAceptacionRechazo
+    {
+
+        private AcuseAceptacionRechazoFolios[] foliosField;
+
+        private SignatureType signatureField;
+
+        private string rfcReceptorField;
+
+        private string rfcPacField;
+
+        private string codEstatusField;
+
+        private System.DateTime fechaField;
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("Folios", Order = 0)]
+        public AcuseAceptacionRechazoFolios[] Folios
+        {
+            get
+            {
+                return this.foliosField;
+            }
+            set
+            {
+                this.foliosField = value;                
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://www.w3.org/2000/09/xmldsig#", Order = 1)]
+        public SignatureType Signature
+        {
+            get
+            {
+                return this.signatureField;
+            }
+            set
+            {
+                this.signatureField = value;                
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string RfcReceptor
+        {
+            get
+            {
+                return this.rfcReceptorField;
+            }
+            set
+            {
+                this.rfcReceptorField = value;                
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string RfcPac
+        {
+            get
+            {
+                return this.rfcPacField;
+            }
+            set
+            {
+                this.rfcPacField = value;                
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string CodEstatus
+        {
+            get
+            {
+                return this.codEstatusField;
+            }
+            set
+            {
+                this.codEstatusField = value;
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public System.DateTime Fecha
+        {
+            get
+            {
+                return this.fechaField;
+            }
+            set
+            {
+                this.fechaField = value;
+            }
+        }
+    }
+}

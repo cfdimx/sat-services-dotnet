@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="SAT.Services.CancelaCFDService" CodeBehind="CancelaCFDService.svc.cs" %>
