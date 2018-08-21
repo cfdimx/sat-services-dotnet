@@ -1,17 +1,21 @@
-﻿using System;
+﻿using SAT.AceptacionRechazo;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using System.Xml.Serialization;
 
 namespace SAT.Services
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "ICancelationAceptacionRechazoService" in both code and config file together.
-    [ServiceContract]
+    [ServiceContract(Namespace = "http://cancelacfd.sat.gob.mx")]
+    [XmlSerializerFormat]
+    [XmlRoot(Namespace = "http://cancelacfd.sat.gob.mx")]
     public interface ICancelationAceptacionRechazoService
     {
         [OperationContract]
-        void DoWork();
+        AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud);
     }
 }

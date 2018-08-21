@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
+using SAT.AceptacionRechazo;
 
 namespace SAT.Services
 {
@@ -11,8 +12,15 @@ namespace SAT.Services
     // NOTE: In order to launch WCF Test Client for testing this service, please select CancelationAceptacionRechazoService.svc or CancelationAceptacionRechazoService.svc.cs at the Solution Explorer and start debugging.
     public class CancelationAceptacionRechazoService : ICancelationAceptacionRechazoService
     {
-        public void DoWork()
+
+        ICancelationAceptacionRechazoServiceEmulation _service;
+        public CancelationAceptacionRechazoService()
         {
+            _service = new CancelationAceptacionRechazoServiceEmulation();
+        }
+        public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud)
+        {
+            return _service.ProcesarRespuesta(solicitud);
         }
     }
 }
