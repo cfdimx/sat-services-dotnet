@@ -18,10 +18,9 @@ namespace SAT.Services
         {
             _service = new CancelaCFDServiceEmulation();
         }
-        public Acuse CancelaCFD(string Cancelacion)
+        public Acuse CancelaCFD(Cancelacion Cancelacion)
         {
-            //return _service.CancelaCFD(Cancelacion);
-            return null;
+            return _service.CancelaCFD(Cancelacion);
         }
     }
 }
