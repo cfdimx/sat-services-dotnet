@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using SAT.Core;
 
 namespace SAT.CfdiConsultaRelacionados
@@ -75,7 +77,7 @@ namespace SAT.CfdiConsultaRelacionados
             }
             set
             {
-                this.rfcPacEnviaSolicitudField = value;                
+                this.rfcPacEnviaSolicitudField = value;
             }
         }
     }
