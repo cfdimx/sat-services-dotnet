@@ -41,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CancelaCFDServiceEmulation.cs" />
-    <Compile Include="ICancelaCFDServiceEmulation.cs" />
+    <Compile Include="CancelaCFDBindingEmulation.cs" />
+    <Compile Include="ICancelaCFDBindingEmulation.cs" />
     <Compile Include="Models\Acuse.cs" />
     <Compile Include="Models\AcuseFolios.cs" />
     <Compile Include="Models\Cancelacion.cs" />

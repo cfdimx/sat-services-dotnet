@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAT.CancelaCFD
 {
-    public interface ICancelaCFDServiceEmulation
+    public interface ICancelaCFDBindingEmulation
     {
         Acuse CancelaCFD(Cancelacion Cancelacion);
     }

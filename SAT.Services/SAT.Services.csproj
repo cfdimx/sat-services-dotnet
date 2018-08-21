@@ -80,7 +80,7 @@
     <Compile Include="ConsultaCFDIService.svc.cs">
       <DependentUpon>ConsultaCFDIService.svc</DependentUpon>
     </Compile>
-    <Compile Include="ICancelaCFDService.cs" />
+    <Compile Include="ICancelaCFDBinding.cs" />
     <Compile Include="ICancelationAceptacionRechazoService.cs" />
     <Compile Include="ICfdiConsultaRelacionadosService.cs" />
     <Compile Include="IConsultaCFDIService.cs" />

@@ -10,8 +10,8 @@ using System.ServiceModel;
 
 namespace SAT.CancelaCFD
 {
-    [ServiceBehavior(Namespace = "http://cancela",AddressFilterMode = AddressFilterMode.Any)]
-    public class CancelaCFDServiceEmulation : ICancelaCFDServiceEmulation
+    [ServiceBehavior(Namespace = "http://cancelacfd.sat.gob.mx", AddressFilterMode = AddressFilterMode.Any)]
+    public class CancelaCFDBindingEmulation : ICancelaCFDBindingEmulation
     {
         public Acuse CancelaCFD(Cancelacion cancelacion)
         {
@@ -19,16 +19,20 @@ namespace SAT.CancelaCFD
             Acuse acuse = new Acuse();
             acuse.CodEstatus = "CA1000";
             acuse.Fecha = cancelationDate;
+
             if (cancelacion.Folios?.Count() > 0)
             {
+                acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
+                var acusesFolios = new List<AcuseFolios>();
                 foreach (var folio in cancelacion.Folios)
                 {
-                    acuse.Folios.Append(new AcuseFolios()
+                    acusesFolios.Add(new AcuseFolios()
                     {
                         EstatusUUID = "201",
                         UUID = folio.UUID
                     });
                 }
+                acuse.Folios = acusesFolios.ToArray();
             }
             acuse.RfcEmisor = cancelacion.RfcEmisor;
             acuse.Signature = cancelacion.Signature;
