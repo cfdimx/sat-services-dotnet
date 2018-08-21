@@ -10,6 +10,29 @@ namespace SAT.CfdiConsultaRelacionados
     {
         public ConsultaRelacionados ProcesarRespuesta(PeticionConsultaRelacionados solicitud)
         {
+            Guid uuid = Guid.Empty;
+            if (solicitud == null || string.IsNullOrEmpty(solicitud.RfcReceptor))
+                return new ConsultaRelacionados()
+                {
+                    UuidConsultado = solicitud.Uuid,
+                    Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor}  -UUID: {solicitud.Uuid} - Clave: 301 - Error: La solicitud no tiene definido el RFC Receptor"
+                };
+
+            if (solicitud.RfcReceptor.Length != 13 && solicitud.RfcReceptor.Length != 12)
+                return new ConsultaRelacionados()
+                {
+                    UuidConsultado = solicitud.Uuid,
+                    Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor} - UUID: {solicitud.Uuid} - Clave: 301 - Error: El formato del RFC del receptor proporcionado no es válido."
+                };
+
+            if (Guid.TryParse(solicitud.Uuid, out uuid))
+                return new ConsultaRelacionados()
+                {
+                    UuidConsultado = solicitud.Uuid,
+                    Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor} - UUID:  - Clave: 301 - Error: Solicitud invalida, el uuid de la peticion no posee el formato correcto."
+                };
+
+
             return new ConsultaRelacionados()
             {
                 Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor} - folio físcal: {solicitud.Uuid} - Clave: 2000 - Se encontraron CFDI relacionados",

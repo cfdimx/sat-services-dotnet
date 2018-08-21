@@ -9,27 +9,76 @@ using SAT.Core;
 
 namespace SAT.CfdiConsultaRelacionados
 {
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://cancelacfd.sat.gob.mx")]
-    [DataContract(Namespace = "http://cancelacfd.sat.gob.mx")]
     public partial class PeticionConsultaRelacionados
     {
-        /// <remarks/>
 
-        [XmlElement(Order = 0)]
-        [DataMember]
-        public SignatureType Signature { get; set; }
-        /// <remarks/>
-        [XmlAttribute]
-        [DataMember]
-        public string Uuid { get; set; }
+        private SignatureType signatureField;
+
+        private string uuidField;
+
+        private string rfcReceptorField;
+
+        private string rfcPacEnviaSolicitudField;
 
         /// <remarks/>
-        [XmlAttribute]
-        [DataMember]
-        public string RfcReceptor { get; set; }
+        [System.Xml.Serialization.XmlElementAttribute(Namespace = "http://www.w3.org/2000/09/xmldsig#", Order = 0)]
+        public SignatureType Signature
+        {
+            get
+            {
+                return this.signatureField;
+            }
+            set
+            {
+                this.signatureField = value;                
+            }
+        }
+
         /// <remarks/>
-        [XmlAttribute]
-        [DataMember]
-        public string RfcPacEnviaSolicitud { get; set; }
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string Uuid
+        {
+            get
+            {
+                return this.uuidField;
+            }
+            set
+            {
+                this.uuidField = value;                
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string RfcReceptor
+        {
+            get
+            {
+                return this.rfcReceptorField;
+            }
+            set
+            {
+                this.rfcReceptorField = value;                
+            }
+        }
+
+        /// <remarks/>
+        [System.Xml.Serialization.XmlAttributeAttribute()]
+        public string RfcPacEnviaSolicitud
+        {
+            get
+            {
+                return this.rfcPacEnviaSolicitudField;
+            }
+            set
+            {
+                this.rfcPacEnviaSolicitudField = value;
+            }
+        }
     }
 }
