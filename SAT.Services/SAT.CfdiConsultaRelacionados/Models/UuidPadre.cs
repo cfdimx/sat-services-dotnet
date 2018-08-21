@@ -11,7 +11,7 @@ namespace SAT.CfdiConsultaRelacionados
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://cancelacfd.sat.gob.mx")]
-    public partial class UuidPadre : object, System.ComponentModel.INotifyPropertyChanged
+    public partial class UuidPadre
     {
 
         private string uuidField;
@@ -31,7 +31,6 @@ namespace SAT.CfdiConsultaRelacionados
             set
             {
                 this.uuidField = value;
-                this.RaisePropertyChanged("Uuid");
             }
         }
 
@@ -45,8 +44,7 @@ namespace SAT.CfdiConsultaRelacionados
             }
             set
             {
-                this.rfcEmisorField = value;
-                this.RaisePropertyChanged("RfcEmisor");
+                this.rfcEmisorField = value;                
             }
         }
 
@@ -60,19 +58,7 @@ namespace SAT.CfdiConsultaRelacionados
             }
             set
             {
-                this.rfcReceptorField = value;
-                this.RaisePropertyChanged("RfcReceptor");
-            }
-        }
-
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-
-        protected void RaisePropertyChanged(string propertyName)
-        {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null))
-            {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+                this.rfcReceptorField = value;                
             }
         }
     }
