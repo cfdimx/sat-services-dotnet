@@ -24,30 +24,40 @@ namespace SAT.AceptacionRechazo
         public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
         {
             AcuseAceptacionRechazo ar = new AcuseAceptacionRechazo();
-            X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
-            if(certificate == null)
+            try
+            {
+                X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
+                if (certificate == null)
+                {
+                    ar.CodEstatus = "305";
+                    return ar;
+                }
+                if (!IsValidIssuer(SolicitudAceptacionRechazo))
+                {
+                    ar.CodEstatus = "300";
+                    return ar;
+                }
+
+                List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
+                foreach (var f in SolicitudAceptacionRechazo.Folios)
+                {
+                    folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000" });
+                }
+                ar.Folios = folios.ToArray();
+                ar.Signature = SolicitudAceptacionRechazo.Signature;
+                ar.Fecha = SolicitudAceptacionRechazo.Fecha;
+                ar.RfcPac = SolicitudAceptacionRechazo.RfcPacEnviaSolicitud;
+                ar.RfcReceptor = SolicitudAceptacionRechazo.RfcReceptor;
+                ar.CodEstatus = "1000";
+                return ar;
+            }
+            catch (Exception e)
             {
                 ar.CodEstatus = "305";
                 return ar;
             }
-            if (!IsValidIssuer(SolicitudAceptacionRechazo))
-            {
-                ar.CodEstatus = "300";
-                return ar;
-            }
             
-            List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
-            foreach (var f in SolicitudAceptacionRechazo.Folios)
-            {
-                folios.Add(new AcuseAceptacionRechazoFolios {UUID = f.UUID, EstatusUUID = "1000" });
-            }
-            ar.Folios = folios.ToArray();
-            ar.Signature = SolicitudAceptacionRechazo.Signature;
-            ar.Fecha = SolicitudAceptacionRechazo.Fecha;
-            ar.RfcPac = SolicitudAceptacionRechazo.RfcPacEnviaSolicitud;
-            ar.RfcReceptor = SolicitudAceptacionRechazo.RfcReceptor;
-            ar.CodEstatus = "1000";
-            return ar;
+            
         }
 
         private bool IsValidIssuer(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
