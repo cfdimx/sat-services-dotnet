@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -23,6 +24,18 @@ namespace SAT.AceptacionRechazo
         public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
         {
             AcuseAceptacionRechazo ar = new AcuseAceptacionRechazo();
+            X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
+            if(certificate == null)
+            {
+                ar.CodEstatus = "305";
+                return ar;
+            }
+            if (!IsValidIssuer(SolicitudAceptacionRechazo))
+            {
+                ar.CodEstatus = "300";
+                return ar;
+            }
+            
             List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
             foreach (var f in SolicitudAceptacionRechazo.Folios)
             {
@@ -33,8 +46,32 @@ namespace SAT.AceptacionRechazo
             ar.Fecha = SolicitudAceptacionRechazo.Fecha;
             ar.RfcPac = SolicitudAceptacionRechazo.RfcPacEnviaSolicitud;
             ar.RfcReceptor = SolicitudAceptacionRechazo.RfcReceptor;
-            ar.CodEstatus = "1100";
+            ar.CodEstatus = "1000";
             return ar;
         }
+
+        private bool IsValidIssuer(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
+        {
+            X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
+            string taxIdCertificate = "";
+            string[] subjects = certificate.SubjectName.Name.Trim().Split(',');
+            foreach (var strTemp in subjects.ToList())
+            {
+                string[] strConceptoTemp = strTemp.Split('=');
+                if (strConceptoTemp[0].Trim() == "OID.2.5.4.45")
+                {
+                    taxIdCertificate = strConceptoTemp[1].Trim().Split('/')[0];
+                    
+                    taxIdCertificate = taxIdCertificate.Replace("\"", "");
+                    break;
+                }
+            }
+            taxIdCertificate = taxIdCertificate.Trim().ToUpper();
+            SolicitudAceptacionRechazo.RfcReceptor = SolicitudAceptacionRechazo.RfcReceptor.Trim().ToUpper();
+
+            return taxIdCertificate == SolicitudAceptacionRechazo.RfcReceptor;
+        }
+
+        
     }
 }
