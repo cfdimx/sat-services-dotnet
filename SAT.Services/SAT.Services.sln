@@ -17,7 +17,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.AceptacionRechazo", "SA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.CfdiConsultaRelacionados", "SAT.CfdiConsultaRelacionados\SAT.CfdiConsultaRelacionados.csproj", "{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UT_AceptacionRechazo", "..\UT_AceptacionRechazo\UT_AceptacionRechazo.csproj", "{9BEB2AF9-19C1-4AAA-988F-02352FC2F891}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SW.AceptacionRechazo_UT", "SW.AceptacionRechazo_UT\SW.AceptacionRechazo_UT.csproj", "{FC9C6A09-5FF5-4B93-B662-37233326DC03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,10 +53,10 @@ Global
 		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9BEB2AF9-19C1-4AAA-988F-02352FC2F891}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9BEB2AF9-19C1-4AAA-988F-02352FC2F891}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9BEB2AF9-19C1-4AAA-988F-02352FC2F891}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9BEB2AF9-19C1-4AAA-988F-02352FC2F891}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC9C6A09-5FF5-4B93-B662-37233326DC03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC9C6A09-5FF5-4B93-B662-37233326DC03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC9C6A09-5FF5-4B93-B662-37233326DC03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC9C6A09-5FF5-4B93-B662-37233326DC03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
