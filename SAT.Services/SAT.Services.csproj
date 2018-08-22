@@ -62,7 +62,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CancelaCFDService.svc" />
-    <Content Include="CancelationAceptacionRechazoService.svc" />
+    <Content Include="AceptacionRechazoService.svc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="CfdiConsultaRelacionadosService.svc" />
     <Content Include="ConsultaCFDIService.svc" />
     <Content Include="Web.config" />
@@ -71,8 +73,9 @@
     <Compile Include="CancelaCFDService.svc.cs">
       <DependentUpon>CancelaCFDService.svc</DependentUpon>
     </Compile>
-    <Compile Include="CancelationAceptacionRechazoService.svc.cs">
-      <DependentUpon>CancelationAceptacionRechazoService.svc</DependentUpon>
+    <Compile Include="AceptacionRechazoService.svc.cs">
+      <DependentUpon>AceptacionRechazoService.svc</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="CfdiConsultaRelacionadosService.svc.cs">
       <DependentUpon>CfdiConsultaRelacionadosService.svc</DependentUpon>
