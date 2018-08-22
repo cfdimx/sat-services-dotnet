@@ -13,9 +13,11 @@ namespace SAT.Services
     [ServiceContract(Namespace = "http://cancelacfd.sat.gob.mx")]
     [XmlSerializerFormat]
     [XmlRoot(Namespace = "http://cancelacfd.sat.gob.mx")]
-    public interface ICancelationAceptacionRechazoService
+    public interface IAceptacionRechazoService
     {
         [OperationContract]
         AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud);
+        [OperationContract]
+        AcusePeticionesPendientes ObtenerPeticionesPendientes(string rfcReceptor);
     }
 }
