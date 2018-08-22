@@ -32,6 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -40,8 +41,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CancelaCFDServiceEmulation.cs" />
-    <Compile Include="ICancelaCFDServiceEmulation.cs" />
+    <Compile Include="CancelaCFDBindingEmulation.cs" />
+    <Compile Include="ICancelaCFDBindingEmulation.cs" />
     <Compile Include="Models\Acuse.cs" />
     <Compile Include="Models\AcuseFolios.cs" />
     <Compile Include="Models\Cancelacion.cs" />
@@ -53,6 +54,9 @@
       <Project>{555b51d8-9bf2-4e27-b9e0-89ac2845d563}</Project>
       <Name>SAT.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Handler\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
