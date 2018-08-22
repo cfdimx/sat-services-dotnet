@@ -4,7 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SAT.AceptacionRechazo;
 using SAT.Core;
 
-namespace UT_AceptacionRechazo
+namespace SAT.AceptacionRechazo_UT
 {
     [TestClass]
     public class UnitTest1
