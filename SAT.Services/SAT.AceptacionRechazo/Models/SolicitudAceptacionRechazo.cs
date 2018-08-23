@@ -1,13 +1,16 @@
 ﻿using SAT.Core;
+using System;
+using System.Xml.Serialization;
 
 namespace SAT.AceptacionRechazo
 {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
-    [System.SerializableAttribute()]
+    [Serializable]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://cancelacfd.sat.gob.mx")]
-    public partial class SolicitudAceptacionRechazo
+    [XmlRoot(Namespace = "http://cancelacfd.sat.gob.mx")]
+    public class SolicitudAceptacionRechazo
     {
 
         private SolicitudAceptacionRechazoFolios[] foliosField;
