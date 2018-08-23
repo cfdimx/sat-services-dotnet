@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using SAT.Core.Helpers;
 using System.ServiceModel;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SAT.CancelaCFD
 {
@@ -15,8 +16,30 @@ namespace SAT.CancelaCFD
     {
         public Acuse CancelaCFD(Cancelacion cancelacion)
         {
-            DateTime cancelationDate = DateTime.Parse(string.Format("{0:s}", DateTime.UtcNow), CultureInfo.InvariantCulture);
             Acuse acuse = new Acuse();
+            acuse.RfcEmisor = cancelacion.RfcEmisor;
+            acuse.Fecha = cancelacion.Fecha;
+            acuse.Signature = cancelacion.Signature;
+
+            X509Certificate2 certificate = new X509Certificate2(cancelacion.Signature.KeyInfo.X509Data.X509Certificate);
+            if (certificate == null)
+            {
+                acuse.CodEstatus = "305";
+                return acuse;
+            }
+            if (!Sign.IsValidIssuer(certificate, cancelacion.RfcEmisor))
+            {
+                acuse.CodEstatus = "303";
+                return acuse;
+            }
+            string xml = Serializer.SerializeDocumentToXml<Cancelacion>(cancelacion);
+            if (!Sign.Verify(xml, cancelacion.Signature.SignatureValue, certificate))
+            {
+                acuse.CodEstatus = "302";
+                return acuse;
+            }
+            DateTime cancelationDate = DateTime.Parse(string.Format("{0:s}", DateTime.UtcNow), CultureInfo.InvariantCulture);
+           
             acuse.CodEstatus = "CA1000";
             acuse.Fecha = cancelationDate;
 

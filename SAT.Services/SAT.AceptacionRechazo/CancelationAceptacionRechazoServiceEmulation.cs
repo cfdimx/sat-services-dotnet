@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using SAT.Core.Helpers;
 
 namespace SAT.AceptacionRechazo
 {
@@ -30,7 +31,7 @@ namespace SAT.AceptacionRechazo
                 ar.CodEstatus = "305";
                 return ar;
             }
-            if (!IsValidIssuer(SolicitudAceptacionRechazo))
+            if (!Sign.IsValidIssuer(certificate, SolicitudAceptacionRechazo.RfcReceptor))
             {
                 ar.CodEstatus = "300";
                 return ar;
@@ -49,29 +50,5 @@ namespace SAT.AceptacionRechazo
             ar.CodEstatus = "1000";
             return ar;
         }
-
-        private bool IsValidIssuer(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
-        {
-            X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
-            string taxIdCertificate = "";
-            string[] subjects = certificate.SubjectName.Name.Trim().Split(',');
-            foreach (var strTemp in subjects.ToList())
-            {
-                string[] strConceptoTemp = strTemp.Split('=');
-                if (strConceptoTemp[0].Trim() == "OID.2.5.4.45")
-                {
-                    taxIdCertificate = strConceptoTemp[1].Trim().Split('/')[0];
-                    
-                    taxIdCertificate = taxIdCertificate.Replace("\"", "");
-                    break;
-                }
-            }
-            taxIdCertificate = taxIdCertificate.Trim().ToUpper();
-            SolicitudAceptacionRechazo.RfcReceptor = SolicitudAceptacionRechazo.RfcReceptor.Trim().ToUpper();
-
-            return taxIdCertificate == SolicitudAceptacionRechazo.RfcReceptor;
-        }
-
-        
     }
 }
