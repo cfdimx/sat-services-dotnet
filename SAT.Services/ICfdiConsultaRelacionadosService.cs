@@ -9,7 +9,8 @@ using System.Text;
 namespace SAT.Services
 {
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "ICfdiConsultaRelacionadosService" in both code and config file together.
-    [ServiceContract]
+    [ServiceContract(Namespace = "http://cancelacfd.sat.gob.mx")]
+    [XmlSerializerFormat]
     public interface ICfdiConsultaRelacionadosService
     {
         [OperationContract]

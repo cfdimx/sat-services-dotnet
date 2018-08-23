@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 using SAT.Core;
 
 namespace SAT.CfdiConsultaRelacionados
@@ -12,6 +14,7 @@ namespace SAT.CfdiConsultaRelacionados
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://cancelacfd.sat.gob.mx")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://cancelacfd.sat.gob.mx")]
     public partial class PeticionConsultaRelacionados
     {
 
@@ -75,7 +78,7 @@ namespace SAT.CfdiConsultaRelacionados
             }
             set
             {
-                this.rfcPacEnviaSolicitudField = value;                
+                this.rfcPacEnviaSolicitudField = value;
             }
         }
     }

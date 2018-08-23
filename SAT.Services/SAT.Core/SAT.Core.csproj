@@ -40,6 +40,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +52,11 @@
   <ItemGroup>
     <Compile Include="CanonicalizationMethodType.cs" />
     <Compile Include="DigestMethodType.cs" />
+    <Compile Include="Helpers\FiscalHelper.cs" />
+    <Compile Include="Helpers\SignatureHelper.cs" />
+    <Compile Include="Helpers\WriteFullElementXmlTextWriter.cs" />
+    <Compile Include="Helpers\XmlHelper.cs" />
+    <Compile Include="Helpers\XmlMessageSerializer.cs" />
     <Compile Include="KeyInfoType.cs" />
     <Compile Include="KeyValueType.cs" />
     <Compile Include="ObjectType.cs" />

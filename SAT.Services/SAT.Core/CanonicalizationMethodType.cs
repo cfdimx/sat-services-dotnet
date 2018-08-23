@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SAT.Core
 {
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.7.3056.0")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34230")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
@@ -18,9 +19,8 @@ namespace SAT.Core
 
         private string algorithmField;
 
-        /// <remarks/>
         [System.Xml.Serialization.XmlTextAttribute()]
-        [System.Xml.Serialization.XmlAnyElementAttribute(Order = 0)]
+        [System.Xml.Serialization.XmlAnyElementAttribute(Order = 1)]
         public System.Xml.XmlNode[] Any
         {
             get
@@ -29,7 +29,7 @@ namespace SAT.Core
             }
             set
             {
-                this.anyField = value;                
+                this.anyField = value;
             }
         }
 
@@ -43,8 +43,9 @@ namespace SAT.Core
             }
             set
             {
-                this.algorithmField = value;                
+                this.algorithmField = value;
             }
         }
     }
 }
+
