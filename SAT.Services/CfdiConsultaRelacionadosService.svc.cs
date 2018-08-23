@@ -19,7 +19,7 @@ namespace SAT.Services
         }
         public ConsultaRelacionados ProcesarRespuesta(PeticionConsultaRelacionados solicitud)
         {
-            return _service.ProcesarRespuesta(solicitud);
+           return _service.ProcesarRespuesta(solicitud);
         }
     }
 }

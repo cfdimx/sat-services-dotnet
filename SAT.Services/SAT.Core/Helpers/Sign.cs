@@ -37,44 +37,34 @@ namespace SAT.Core.Helpers
                 return false;
             }
         }
-        public static bool Verify(string xml, byte[] signature, X509Certificate2 X509Certificate)
+        public static bool Verify(string xmlCancelacion)
         {
-
             XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.PreserveWhitespace = false;
-            xmlDoc.LoadXml(GetString(xml));
-            xmlDoc.DocumentElement.RemoveChild(xmlDoc.DocumentElement["Signature"]);
-            //XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
-            //signedXml.LoadXml((XmlElement)nodeList[0]);
-            //return signedXml.CheckSignature(X509Certificate);
-            //using (RSA rsaKey = X509Certificate.GetRSAPrivateKey())
-            //{
-            //    if (xmlDoc == null)
-            //        throw new ArgumentException("xml content");
-            //    SignedXml signedXml = new SignedXml(xmlDoc);
-            //    //XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
-            //    //signedXml.LoadXml((XmlElement)nodeList[0]);
-            //    return signedXml.CheckSignature(X509Certificate);
-            //}
-            X509Certificate2 cert = new X509Certificate2(X509Certificate);
-            RSACryptoServiceProvider csp = (RSACryptoServiceProvider)cert.PublicKey.Key;
-            UnicodeEncoding encoding = new UnicodeEncoding();
-            byte[] data = encoding.GetBytes(xmlDoc.OuterXml);
-            byte[] hash = new SHA1Managed().ComputeHash(data);
-            var res = csp.VerifyHash(hash, CryptoConfig.MapNameToOID("SHA1"), signature);
+            xmlDoc.LoadXml(GetString(xmlCancelacion));
+            SignedXml signedXml = new SignedXml(xmlDoc);
+            XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
+            XmlNodeList certificates = xmlDoc.GetElementsByTagName("X509Certificate");
+            X509Certificate2 dcert2 = new X509Certificate2(Convert.FromBase64String(certificates[0].InnerText));
+            signedXml.LoadXml((XmlElement)nodeList[0]);
 
-            return res;
+            foreach (XmlElement element in nodeList)
+            {
+                signedXml.LoadXml(element);
+                bool passes = signedXml.CheckSignature(dcert2, true);
+            }
+
+            return false;
         }
         private static string GetString(string xml)
         {
-            xml = xml.Replace("\r\n", "");
+           // xml = xml.Replace("\r\n", "");
             xml = xml.Replace("\r", "");
             xml = xml.Replace("\n", "");
             xml = xml.Replace("xmlns:xsd=\"http://www.sat.gob.mx/cfd/3\"", "");
             xml = xml.Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", @"<?xml version=""1.0"" encoding=""utf-8""?>").Trim();
             xml = xml.Replace("﻿", "");
-            xml = xml.Replace(@"
-", "");
+           xml = xml.Replace(@"
+//", "");
             return xml;
         }
     }

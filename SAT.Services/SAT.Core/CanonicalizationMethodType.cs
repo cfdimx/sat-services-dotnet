@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace SAT.Core
 {
-    [System.Runtime.Serialization.DataContract(Namespace = "http://www.w3.org/2000/09/xmldsig#")]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34230")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://www.w3.org/2000/09/xmldsig#")]
     public partial class CanonicalizationMethodType
     {
 
@@ -15,8 +19,8 @@ namespace SAT.Core
 
         private string algorithmField;
 
-        /// <remarks/>
-        [DataMember(Order = 0)]
+        [System.Xml.Serialization.XmlTextAttribute()]
+        [System.Xml.Serialization.XmlAnyElementAttribute(Order = 1)]
         public System.Xml.XmlNode[] Any
         {
             get
@@ -30,7 +34,7 @@ namespace SAT.Core
         }
 
         /// <remarks/>
-        [DataMember]
+        [System.Xml.Serialization.XmlAttributeAttribute(DataType = "anyURI")]
         public string Algorithm
         {
             get
@@ -44,3 +48,4 @@ namespace SAT.Core
         }
     }
 }
+

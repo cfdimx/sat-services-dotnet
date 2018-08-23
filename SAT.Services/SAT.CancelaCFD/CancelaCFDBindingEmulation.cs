@@ -33,7 +33,7 @@ namespace SAT.CancelaCFD
                 return acuse;
             }
             string xml = Serializer.SerializeDocumentToXml<Cancelacion>(cancelacion);
-            if (!Sign.Verify(xml, cancelacion.Signature.SignatureValue, certificate))
+            if (!Sign.Verify(xml))
             {
                 acuse.CodEstatus = "302";
                 return acuse;
