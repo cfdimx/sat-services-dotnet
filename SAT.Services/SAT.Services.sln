@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.AceptacionRechazo", "SA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.CfdiConsultaRelacionados", "SAT.CfdiConsultaRelacionados\SAT.CfdiConsultaRelacionados.csproj", "{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAT.CfdiConsultaRelacionados_UT", "SAT.CfdiConsultaRelacionados_UT\SAT.CfdiConsultaRelacionados_UT.csproj", "{2B8BF4A0-3D0F-405C-84A3-9E2F2BB5FB1B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AA844E1-B2DF-4F6E-884B-8CE5B57632E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B8BF4A0-3D0F-405C-84A3-9E2F2BB5FB1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B8BF4A0-3D0F-405C-84A3-9E2F2BB5FB1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B8BF4A0-3D0F-405C-84A3-9E2F2BB5FB1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B8BF4A0-3D0F-405C-84A3-9E2F2BB5FB1B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
