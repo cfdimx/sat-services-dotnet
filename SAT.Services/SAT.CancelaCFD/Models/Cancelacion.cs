@@ -7,6 +7,7 @@ namespace SAT.CancelaCFD
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://cancelacfd.sat.gob.mx")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://cancelacfd.sat.gob.mx")]
     public partial class Cancelacion
     {
 
