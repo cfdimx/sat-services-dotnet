@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace SAT.AceptacionRechazo
 {
@@ -26,6 +28,12 @@ namespace SAT.AceptacionRechazo
             AcuseAceptacionRechazo ar = new AcuseAceptacionRechazo();
             try
             {
+                var validSignature = ValidateSignature(SolicitudAceptacionRechazo);
+                if (!validSignature)
+                {
+                    ar.CodEstatus = "301";
+                    return ar;
+                }
                 X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
                 if (certificate == null)
                 {
@@ -60,6 +68,19 @@ namespace SAT.AceptacionRechazo
             
         }
 
+        private bool ValidateSignature(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
+        {
+            Chilkat.XmlDSig verifier = new Chilkat.XmlDSig();
+            var xml = ToXML(SolicitudAceptacionRechazo.Signature);
+            bool sucLoad = verifier.LoadSignature(xml);
+            if (!sucLoad)
+                return false;
+            return verifier.VerifySignature(true);
+            
+            
+
+        }
+
         private bool IsValidIssuer(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
         {
             X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
@@ -82,6 +103,14 @@ namespace SAT.AceptacionRechazo
             return taxIdCertificate == SolicitudAceptacionRechazo.RfcReceptor;
         }
 
-        
+        private string ToXML<T>(T solicitudAceptacionRechazo)
+        {
+            var stringwriter = new System.IO.StringWriter();
+            var serializer = new XmlSerializer(typeof(T));
+            serializer.Serialize(stringwriter, solicitudAceptacionRechazo);
+            return stringwriter.ToString();
+        }
+
+
     }
 }
