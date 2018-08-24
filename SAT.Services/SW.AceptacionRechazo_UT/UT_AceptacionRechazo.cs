@@ -57,7 +57,7 @@ namespace SAT.AceptacionRechazo_UT
         }
 
         [TestMethod]
-        public void UT_OK_AcceptReject305()
+        public void UT_OK_AcceptReject301_2()
         {
             SolicitudAceptacionRechazo solicitudAceptacionRechazo = new SolicitudAceptacionRechazo()
             {
@@ -69,10 +69,10 @@ namespace SAT.AceptacionRechazo_UT
             };
             var res = _service.ProcesarRespuesta(solicitudAceptacionRechazo);
 
-            Assert.IsTrue(res.CodEstatus == "305");
+            Assert.IsTrue(res.CodEstatus == "301");
         }
         [TestMethod]
-        public void UT_OK_AcceptReject300()
+        public void UT_OK_AcceptReject1005()
         {
             List<SolicitudAceptacionRechazoFolios> folios = new List<SolicitudAceptacionRechazoFolios>();
             folios.Add(new SolicitudAceptacionRechazoFolios() { UUID="4574", Respuesta=TipoAccionPeticionCancelacion.Aceptacion});
@@ -85,8 +85,9 @@ namespace SAT.AceptacionRechazo_UT
                 Signature = _solicitud.Signature
             };
             var res = _service.ProcesarRespuesta(solicitudAceptacionRechazo);
-
-            Assert.IsTrue(res.CodEstatus == "300");
+            
+            Assert.IsTrue(res.CodEstatus == "1000");
+            Assert.IsTrue(res.Folios[0].Respuesta == "1005");
         }
     }
 }

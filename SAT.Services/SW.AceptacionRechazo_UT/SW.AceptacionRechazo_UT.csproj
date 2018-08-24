@@ -115,9 +115,6 @@
     <Reference Include="SW.Resource, Version=1.1.7.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SW.Resource.1.1.7.1\lib\net40\SW.Resource.dll</HintPath>
     </Reference>
-    <Reference Include="SW.SatServices, Version=0.0.4.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SW.SatServices.0.0.4.6-rc\lib\net462\SW.SatServices.dll</HintPath>
-    </Reference>
     <Reference Include="SW.SecurityServices, Version=0.0.1.1, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SW.SecurityServices.0.0.1.1\lib\net462\SW.SecurityServices.dll</HintPath>
     </Reference>

@@ -44,13 +44,29 @@ namespace SAT.AceptacionRechazo
                 }
                 if (!Core.Helpers.FiscalHelper.IsTaxIdValid(solicitud.RfcReceptor))
                 {
-                    ar.CodEstatus = "305";
+                    ar.CodEstatus = "301";
                     return ar;
                 }
                 Guid uuid = Guid.Empty;
+                
                 if(solicitud.Folios.Any(w => !Guid.TryParse(w.UUID, out uuid)))
                 {
-                    ar.CodEstatus = "300";
+                    List<AcuseAceptacionRechazoFolios> fls = new List<AcuseAceptacionRechazoFolios>();
+                    ar.CodEstatus = "1000";
+                    foreach (var f in solicitud.Folios)
+                    {
+                        if (!Guid.TryParse(f.UUID, out uuid))
+                        {
+                            fls.Add(new AcuseAceptacionRechazoFolios() {UUID = f.UUID, Respuesta = "1005" });
+                        }
+                        else
+                        {
+                            fls.Add(new AcuseAceptacionRechazoFolios() { UUID = f.UUID, Respuesta = "1000" });
+                        }
+                    }
+
+                    ar.Folios = fls.ToArray();
+                    ar.Fecha = solicitud.Fecha;
                     return ar;
                 }
                 X509Certificate2 certificate = new X509Certificate2(solicitud.Signature.KeyInfo.X509Data.X509Certificate);
@@ -118,13 +134,7 @@ namespace SAT.AceptacionRechazo
             return taxIdCertificate == SolicitudAceptacionRechazo.RfcReceptor;
         }
 
-        private string ToXML<T>(T solicitudAceptacionRechazo)
-        {
-            var stringwriter = new System.IO.StringWriter();
-            var serializer = new XmlSerializer(typeof(T));
-            serializer.Serialize(stringwriter, solicitudAceptacionRechazo);
-            return stringwriter.ToString();
-        }
+       
 
 
     }
