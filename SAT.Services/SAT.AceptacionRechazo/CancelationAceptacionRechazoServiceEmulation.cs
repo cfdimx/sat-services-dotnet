@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAT.Core.Helpers;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
@@ -13,7 +14,15 @@ namespace SAT.AceptacionRechazo
     {
         public AcusePeticionesPendientes ObtenerPeticionesPendientes(string rfcReceptor)
         {
+
+           
             AcusePeticionesPendientes response = new AcusePeticionesPendientes();
+            if (!Core.Helpers.FiscalHelper.IsTaxIdValid(rfcReceptor))
+            {
+                response.CodEstatus = "305";
+                return response;
+            }
+            
             response.CodEstatus = "1100";
             string[] uuids = { Guid.NewGuid().ToString() };
             response.UUID = uuids;
@@ -28,10 +37,20 @@ namespace SAT.AceptacionRechazo
             AcuseAceptacionRechazo ar = new AcuseAceptacionRechazo();
             try
             {
-                var validSignature = ValidateSignature(SolicitudAceptacionRechazo);
-                if (!validSignature)
+                if (SolicitudAceptacionRechazo == null || string.IsNullOrEmpty(SolicitudAceptacionRechazo.RfcReceptor))
                 {
                     ar.CodEstatus = "301";
+                    return ar;
+                }
+                if (!Core.Helpers.FiscalHelper.IsTaxIdValid(SolicitudAceptacionRechazo.RfcReceptor))
+                {
+                    ar.CodEstatus = "305";
+                    return ar;
+                }
+                Guid uuid = Guid.Empty;
+                if(SolicitudAceptacionRechazo.Folios.Any(w => !Guid.TryParse(w.UUID, out uuid)))
+                {
+                    ar.CodEstatus = "300";
                     return ar;
                 }
                 X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
@@ -46,6 +65,13 @@ namespace SAT.AceptacionRechazo
                     return ar;
                 }
 
+                var xmlDocument = XmlMessageSerializer.SerializeDocumentToXml(SolicitudAceptacionRechazo);
+                bool isValid = SAT.Core.Helpers.SignatureHelper.ValidateSignatureXml(xmlDocument);
+                if (!isValid)
+                {
+                    ar.CodEstatus = "300";
+                    return ar;
+                }
                 List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
                 foreach (var f in SolicitudAceptacionRechazo.Folios)
                 {
@@ -68,18 +94,7 @@ namespace SAT.AceptacionRechazo
             
         }
 
-        private bool ValidateSignature(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
-        {
-            Chilkat.XmlDSig verifier = new Chilkat.XmlDSig();
-            var xml = ToXML(SolicitudAceptacionRechazo.Signature);
-            bool sucLoad = verifier.LoadSignature(xml);
-            if (!sucLoad)
-                return false;
-            return verifier.VerifySignature(true);
-            
-            
-
-        }
+   
 
         private bool IsValidIssuer(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
         {
