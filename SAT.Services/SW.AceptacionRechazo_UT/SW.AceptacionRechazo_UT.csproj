@@ -46,21 +46,6 @@
     <OutputPath>bin\x64\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
-      <HintPath>..\packages\BouncyCastle.1.8.1\lib\BouncyCastle.Crypto.dll</HintPath>
-    </Reference>
-    <Reference Include="cadenaoriginal32, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\cadenaoriginal32.dll.1.0.10\lib\net40\cadenaoriginal32.dll</HintPath>
-    </Reference>
-    <Reference Include="cadenaoriginal33, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\cadenaoriginal33.dll.1.1.1\lib\net40\cadenaoriginal33.dll</HintPath>
-    </Reference>
-    <Reference Include="cadenaoriginalTFD11, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\cadenaoriginalTFD11.dll.1.0.5\lib\net40\cadenaoriginalTFD11.dll</HintPath>
-    </Reference>
-    <Reference Include="ChilkatDotNet47, Version=9.5.0.70, Culture=neutral, PublicKeyToken=eb5fc1fc52ef09bd, processorArchitecture=AMD64">
-      <HintPath>..\packages\chilkat-x64.9.5.0.70\lib\net471\ChilkatDotNet47.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Azure.KeyVault, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Azure.KeyVault.2.3.2\lib\net452\Microsoft.Azure.KeyVault.dll</HintPath>
     </Reference>
@@ -105,21 +90,6 @@
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="SW.CFDISDK, Version=0.0.11.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SW.CFDISDK.0.0.11.4-rc\lib\net461\SW.CFDISDK.dll</HintPath>
-    </Reference>
-    <Reference Include="SW.Commons, Version=0.0.0.4, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SW.Commons.0.0.0.4\lib\net45\SW.Commons.dll</HintPath>
-    </Reference>
-    <Reference Include="SW.Resource, Version=1.1.7.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SW.Resource.1.1.7.1\lib\net40\SW.Resource.dll</HintPath>
-    </Reference>
-    <Reference Include="SW.SecurityServices, Version=0.0.1.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\SW.SecurityServices.0.0.1.1\lib\net462\SW.SecurityServices.dll</HintPath>
-    </Reference>
-    <Reference Include="SW.SignTool, Version=0.0.0.7, Culture=neutral, processorArchitecture=AMD64">
-      <HintPath>..\packages\SW.SignTool.0.0.0.7-rc\lib\net462\SW.SignTool.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
