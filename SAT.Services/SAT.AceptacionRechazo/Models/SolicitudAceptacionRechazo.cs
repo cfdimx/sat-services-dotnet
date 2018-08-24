@@ -1,6 +1,5 @@
 ﻿using SAT.Core;
 using System;
-using System.Xml.Serialization;
 
 namespace SAT.AceptacionRechazo
 {
@@ -9,7 +8,7 @@ namespace SAT.AceptacionRechazo
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace = "http://cancelacfd.sat.gob.mx")]
-    [XmlRoot(Namespace = "http://cancelacfd.sat.gob.mx")]
+    [System.Xml.Serialization.XmlRoot(Namespace = "http://cancelacfd.sat.gob.mx")]
     public class SolicitudAceptacionRechazo
     {
 
