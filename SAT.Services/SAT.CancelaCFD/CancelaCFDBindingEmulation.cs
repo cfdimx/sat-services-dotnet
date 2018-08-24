@@ -16,6 +16,7 @@ namespace SAT.CancelaCFD
     {
         public Acuse CancelaCFD(Cancelacion cancelacion)
         {
+            string xml = string.Empty;
             Acuse acuse = new Acuse();
             acuse.RfcEmisor = cancelacion.RfcEmisor;
             acuse.Fecha = cancelacion.Fecha;
@@ -29,10 +30,18 @@ namespace SAT.CancelaCFD
             }
             if (!Sign.IsValidIssuer(certificate, cancelacion.RfcEmisor))
             {
-                acuse.CodEstatus = "303";
+                acuse.CodEstatus = "203";
                 return acuse;
             }
-            string xml = XmlMessageSerializer.SerializeDocumentToXml(cancelacion);
+            try
+            {
+               xml = XmlMessageSerializer.SerializeDocumentToXml(cancelacion);
+            }
+            catch
+            {
+                acuse.CodEstatus = "301";
+                return acuse;
+            }
             if (!SignatureHelper.ValidateSignatureXml(xml))
             {
                 acuse.CodEstatus = "302";
@@ -57,6 +66,7 @@ namespace SAT.CancelaCFD
                 }
                 acuse.Folios = acusesFolios.ToArray();
             }
+            acuse.CodEstatus = "201";
             acuse.RfcEmisor = cancelacion.RfcEmisor;
             acuse.Signature = cancelacion.Signature;
 

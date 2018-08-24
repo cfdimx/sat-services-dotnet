@@ -37,35 +37,5 @@ namespace SAT.Core.Helpers
                 return false;
             }
         }
-        public static bool Verify(string xmlCancelacion)
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.LoadXml(GetString(xmlCancelacion));
-            SignedXml signedXml = new SignedXml(xmlDoc);
-            XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
-            XmlNodeList certificates = xmlDoc.GetElementsByTagName("X509Certificate");
-            X509Certificate2 dcert2 = new X509Certificate2(Convert.FromBase64String(certificates[0].InnerText));
-            signedXml.LoadXml((XmlElement)nodeList[0]);
-
-            foreach (XmlElement element in nodeList)
-            {
-                signedXml.LoadXml(element);
-                bool passes = signedXml.CheckSignature(dcert2, true);
-            }
-
-            return false;
-        }
-        private static string GetString(string xml)
-        {
-           // xml = xml.Replace("\r\n", "");
-            xml = xml.Replace("\r", "");
-            xml = xml.Replace("\n", "");
-            xml = xml.Replace("xmlns:xsd=\"http://www.sat.gob.mx/cfd/3\"", "");
-            xml = xml.Replace(@"<?xml version=""1.0"" encoding=""utf-16""?>", @"<?xml version=""1.0"" encoding=""utf-8""?>").Trim();
-            xml = xml.Replace("﻿", "");
-           xml = xml.Replace(@"
-//", "");
-            return xml;
-        }
     }
 }
