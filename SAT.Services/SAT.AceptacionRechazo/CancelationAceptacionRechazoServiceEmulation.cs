@@ -68,7 +68,7 @@ namespace SAT.AceptacionRechazo
                     ar.CodEstatus = "305";
                     return ar;
                 }
-                if (!Sign.IsValidIssuer(certificate, SolicitudAceptacionRechazo.RfcReceptor))
+                if (!Sign.IsValidIssuer(certificate, solicitud.RfcReceptor))
                 {
                     ar.CodEstatus = "300";
                     return ar;
