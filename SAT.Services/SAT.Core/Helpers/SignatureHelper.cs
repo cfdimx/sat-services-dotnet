@@ -15,8 +15,8 @@ namespace SAT.Core.Helpers
         public static bool ValidateSignatureXml(string xml)
         {
             try
-            {               
-                XmlDocument xmlDoc = new XmlDocument();                
+            {
+                XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(xml);
                 SignedXml signedXml = new SignedXml(xmlDoc);
                 XmlNodeList nodeList = xmlDoc.GetElementsByTagName("Signature");
@@ -34,6 +34,56 @@ namespace SAT.Core.Helpers
             {
                 return false;
             }
+        }
+        public static (string taxId, string legalTaxId) CertificateGetInfoTaxId(byte[] certificate)
+        {
+            try
+            {
+                X509Certificate2 x509Certificate = new X509Certificate2(certificate);
+                var taxId = CertificateTaxId(x509Certificate);
+                var taxIdLegal = CertificateLegalTaxId(x509Certificate);
+                return (taxId, taxIdLegal);
+            }
+            catch (Exception)
+            {
+                return ("", "");
+            }
+        }
+        public static string CertificateTaxId(X509Certificate2 certificate)
+        {
+            string taxIdCertificate = "";
+            string[] subjects = certificate.SubjectName.Name.Trim().Split(',');
+            foreach (var strTemp in subjects.ToList())
+            {
+                string[] strConceptoTemp = strTemp.Split('=');
+                if (strConceptoTemp[0].Trim() == "OID.2.5.4.45")
+                {
+                    taxIdCertificate = strConceptoTemp[1].Trim().Split('/')[0];
+                    //Bug Fix replace "
+                    taxIdCertificate = taxIdCertificate.Replace("\"", "");
+                    break;
+                }
+            }
+            return taxIdCertificate.Trim().ToUpper();
+        }
+        public static string CertificateLegalTaxId(X509Certificate2 certificate)
+        {
+            string taxIdCertificate = "";
+            string[] subjects = certificate.SubjectName.Name.Trim().Split(',');
+            foreach (var strTemp in subjects.ToList())
+            {
+                string[] strConceptoTemp = strTemp.Split('=');
+                if (strConceptoTemp[0].Trim() == "OID.2.5.4.45")
+                {
+                    if (strConceptoTemp[1].Trim().Split('/').Length == 2)
+                        taxIdCertificate = strConceptoTemp[1].Trim().Split('/')[1];
+
+                    //Bug Fix replace "
+                    taxIdCertificate = taxIdCertificate.Replace("\"", "");
+                    break;
+                }
+            }
+            return taxIdCertificate.Trim().ToUpper();
         }
     }
 }

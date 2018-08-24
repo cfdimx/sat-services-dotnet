@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -73,6 +74,37 @@ namespace SAT.Core.Helpers
             str = str.Replace(@"
 ", "");
             return str;
+        }
+
+        public static byte[] GetCertificateFromXml(string xml)
+        {
+            try
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(xml);
+                XmlNodeList certificates = xmlDoc.GetElementsByTagName("X509Certificate");
+                return Convert.FromBase64String(certificates[0].InnerText);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+
+        public static string GetSignatureFromXml(string xml)
+        {
+            try
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(xml);
+                XmlNodeList signature = xmlDoc.GetElementsByTagName("Signature");
+                return signature[0].InnerText;
+            }
+            catch (Exception)
+            {
+                return "";
+            }
         }
     }
 }
