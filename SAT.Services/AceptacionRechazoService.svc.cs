@@ -18,9 +18,9 @@ namespace SAT.Services
         {
             _service = new CancelationAceptacionRechazoServiceEmulation();
         }
-        public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
+        public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud)
         {
-            return _service.ProcesarRespuesta(SolicitudAceptacionRechazo);
+            return _service.ProcesarRespuesta(solicitud);
         }
         public AcusePeticionesPendientes ObtenerPeticionesPendientes(string rfcReceptor)
         {

@@ -32,40 +32,40 @@ namespace SAT.AceptacionRechazo
             
         
        
-        public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
+        public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud)
         {
             AcuseAceptacionRechazo ar = new AcuseAceptacionRechazo();
             try
             {
-                if (SolicitudAceptacionRechazo == null || string.IsNullOrEmpty(SolicitudAceptacionRechazo.RfcReceptor))
+                if (solicitud == null || string.IsNullOrEmpty(solicitud.RfcReceptor))
                 {
                     ar.CodEstatus = "301";
                     return ar;
                 }
-                if (!Core.Helpers.FiscalHelper.IsTaxIdValid(SolicitudAceptacionRechazo.RfcReceptor))
+                if (!Core.Helpers.FiscalHelper.IsTaxIdValid(solicitud.RfcReceptor))
                 {
                     ar.CodEstatus = "305";
                     return ar;
                 }
                 Guid uuid = Guid.Empty;
-                if(SolicitudAceptacionRechazo.Folios.Any(w => !Guid.TryParse(w.UUID, out uuid)))
+                if(solicitud.Folios.Any(w => !Guid.TryParse(w.UUID, out uuid)))
                 {
                     ar.CodEstatus = "300";
                     return ar;
                 }
-                X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
+                X509Certificate2 certificate = new X509Certificate2(solicitud.Signature.KeyInfo.X509Data.X509Certificate);
                 if (certificate == null)
                 {
                     ar.CodEstatus = "305";
                     return ar;
                 }
-                if (!IsValidIssuer(SolicitudAceptacionRechazo))
+                if (!IsValidIssuer(solicitud))
                 {
                     ar.CodEstatus = "300";
                     return ar;
                 }
 
-                var xmlDocument = XmlMessageSerializer.SerializeDocumentToXml(SolicitudAceptacionRechazo);
+                var xmlDocument = XmlMessageSerializer.SerializeDocumentToXml(solicitud);
                 bool isValid = SAT.Core.Helpers.SignatureHelper.ValidateSignatureXml(xmlDocument);
                 if (!isValid)
                 {
@@ -73,15 +73,15 @@ namespace SAT.AceptacionRechazo
                     return ar;
                 }
                 List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
-                foreach (var f in SolicitudAceptacionRechazo.Folios)
+                foreach (var f in solicitud.Folios)
                 {
                     folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000" });
                 }
                 ar.Folios = folios.ToArray();
-                ar.Signature = SolicitudAceptacionRechazo.Signature;
-                ar.Fecha = SolicitudAceptacionRechazo.Fecha;
-                ar.RfcPac = SolicitudAceptacionRechazo.RfcPacEnviaSolicitud;
-                ar.RfcReceptor = SolicitudAceptacionRechazo.RfcReceptor;
+                ar.Signature = solicitud.Signature;
+                ar.Fecha = solicitud.Fecha;
+                ar.RfcPac = solicitud.RfcPacEnviaSolicitud;
+                ar.RfcReceptor = solicitud.RfcReceptor;
                 ar.CodEstatus = "1000";
                 return ar;
             }
