@@ -1,4 +1,4 @@
-﻿using SAT.Core.Helpers;
+using SAT.Core.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,25 +13,18 @@ namespace SAT.AceptacionRechazo
     public class CancelationAceptacionRechazoServiceEmulation : ICancelationAceptacionRechazoServiceEmulation
     {
         public AcusePeticionesPendientes ObtenerPeticionesPendientes(string rfcReceptor)
-        {
-
-           
+        {          
             AcusePeticionesPendientes response = new AcusePeticionesPendientes();
             if (!Core.Helpers.FiscalHelper.IsTaxIdValid(rfcReceptor))
             {
                 response.CodEstatus = "305";
                 return response;
             }
-            
             response.CodEstatus = "1100";
             string[] uuids = { Guid.NewGuid().ToString() };
             response.UUID = uuids;
             return response;
         }
-            
-            
-        
-       
         public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud)
         {
             AcuseAceptacionRechazo ar = new AcuseAceptacionRechazo();
@@ -75,7 +68,7 @@ namespace SAT.AceptacionRechazo
                     ar.CodEstatus = "305";
                     return ar;
                 }
-                if (!IsValidIssuer(solicitud))
+                if (!Sign.IsValidIssuer(certificate, solicitud.RfcReceptor))
                 {
                     ar.CodEstatus = "300";
                     return ar;
@@ -109,33 +102,5 @@ namespace SAT.AceptacionRechazo
             
             
         }
-
-   
-
-        private bool IsValidIssuer(SolicitudAceptacionRechazo SolicitudAceptacionRechazo)
-        {
-            X509Certificate2 certificate = new X509Certificate2(SolicitudAceptacionRechazo.Signature.KeyInfo.X509Data.X509Certificate);
-            string taxIdCertificate = "";
-            string[] subjects = certificate.SubjectName.Name.Trim().Split(',');
-            foreach (var strTemp in subjects.ToList())
-            {
-                string[] strConceptoTemp = strTemp.Split('=');
-                if (strConceptoTemp[0].Trim() == "OID.2.5.4.45")
-                {
-                    taxIdCertificate = strConceptoTemp[1].Trim().Split('/')[0];
-                    
-                    taxIdCertificate = taxIdCertificate.Replace("\"", "");
-                    break;
-                }
-            }
-            taxIdCertificate = taxIdCertificate.Trim().ToUpper();
-            SolicitudAceptacionRechazo.RfcReceptor = SolicitudAceptacionRechazo.RfcReceptor.Trim().ToUpper();
-
-            return taxIdCertificate == SolicitudAceptacionRechazo.RfcReceptor;
-        }
-
-       
-
-
-    }
+     }
 }
