@@ -49,7 +49,6 @@ namespace SAT.CancelaCFD
             }
             DateTime cancelationDate = DateTime.Parse(string.Format("{0:s}", DateTime.UtcNow), CultureInfo.InvariantCulture);
            
-            acuse.CodEstatus = "CA1000";
             acuse.Fecha = cancelationDate;
 
             if (cancelacion.Folios?.Count() > 0)
@@ -66,7 +65,6 @@ namespace SAT.CancelaCFD
                 }
                 acuse.Folios = acusesFolios.ToArray();
             }
-            acuse.CodEstatus = "201";
             acuse.RfcEmisor = cancelacion.RfcEmisor;
             acuse.Signature = cancelacion.Signature;
 
