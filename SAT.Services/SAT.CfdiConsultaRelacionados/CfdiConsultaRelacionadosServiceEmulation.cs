@@ -32,13 +32,36 @@ namespace SAT.CfdiConsultaRelacionados
                     UuidConsultado = solicitud.Uuid,
                     Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor} - UUID:  - Clave: 301 - Error: Solicitud invalida, el uuid de la peticion no posee el formato correcto."
                 };
+            //Validate RFCReceptor with Certificate
+            var xmlDocument = XmlMessageSerializer.SerializeDocumentToXml(solicitud);
+            var certificate = XmlHelper.GetCertificateFromXml(xmlDocument);
+            var signature = XmlHelper.GetSignatureFromXml(xmlDocument);
+            if (certificate == null || string.IsNullOrEmpty(signature))
+                return new ConsultaRelacionados()
+                {
+                    UuidConsultado = solicitud.Uuid,
+                    Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor} - UUID: {solicitud.Uuid} - Clave: 302 - Error: No se cuenta con al menos una firma en el documento."
+                };
+
+
+            var taxIdInfo = SignatureHelper.CertificateGetInfoTaxId(certificate);
+
+            if (certificate != null && taxIdInfo.taxId != solicitud.RfcReceptor)
+                return new ConsultaRelacionados()
+                {
+                    UuidConsultado = solicitud.Uuid,
+                    Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor} - UUID: {solicitud.Uuid} - Clave: 1003 - Error: Los datos del certificado no son correctos [Rfc: { solicitud.RfcReceptor } &lt;=> Certificado.Rfc: {taxIdInfo.taxId} &lt;=> Certificado.RfcRepresentanteLegal: {taxIdInfo.legalTaxId}]."
+                };
 
             //Validate Signature
-            var xmlDocument = XmlMessageSerializer.SerializeDocumentToXml(solicitud);
             bool isValid = SAT.Core.Helpers.SignatureHelper.ValidateSignatureXml(xmlDocument);
             if (!isValid)
             {
-                throw new Exception();
+                return new ConsultaRelacionados()
+                {
+                    UuidConsultado = solicitud.Uuid,
+                    Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor} - UUID: {solicitud.Uuid} - Clave: 1003 - Los datos de la firma no son correctos. - Warning: Esta validación es del servicio de Emulación. -"
+                };
             }
 
             return new ConsultaRelacionados()

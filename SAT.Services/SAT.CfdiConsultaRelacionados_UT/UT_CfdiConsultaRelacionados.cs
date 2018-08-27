@@ -27,7 +27,7 @@ namespace SAT.CfdiConsultaRelacionados_UT
         }
 
         [TestMethod]
-        public void ProcesarRespuesta_301_Rfc_Undefined()
+        public void UT_CfdiConsultaRelacionados_301_Rfc_Undefined()
         {
             PeticionConsultaRelacionados solicitud = new PeticionConsultaRelacionados()
             {
@@ -39,7 +39,7 @@ namespace SAT.CfdiConsultaRelacionados_UT
             Assert.IsTrue(response.Resultado.Contains("Clave: 301 - Error: La solicitud no tiene definido el RFC Receptor"));
         }
         [TestMethod]
-        public void ProcesarRespuesta_301_Rfc_Invalid()
+        public void UT_CfdiConsultaRelacionados_301_Rfc_Invalid()
         {
             PeticionConsultaRelacionados solicitud = new PeticionConsultaRelacionados()
             {
@@ -53,7 +53,7 @@ namespace SAT.CfdiConsultaRelacionados_UT
         }
 
         [TestMethod]
-        public void ProcesarRespuesta_301_UUID_Invalid()
+        public void UT_CfdiConsultaRelacionados_301_UUID_Invalid()
         {
             PeticionConsultaRelacionados solicitud = new PeticionConsultaRelacionados()
             {
@@ -67,7 +67,7 @@ namespace SAT.CfdiConsultaRelacionados_UT
         }
 
         [TestMethod]
-        public void ProcesarRespuesta_2000_OK()
+        public void UT_CfdiConsultaRelacionados_2000_OK()
         {
             //var isValid = SAT.Core.Helpers.SignatureHelper.ValidateSignatureXml(
             //    Core.Helpers.XmlHelper.RemoveInvalidCharsXml(File.ReadAllText(@"Resources\Solicitud.xml")));
@@ -75,9 +75,8 @@ namespace SAT.CfdiConsultaRelacionados_UT
             Assert.IsTrue(response.Resultado.Contains("Clave: 2000 - Se encontraron CFDI relacionados"));
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(Exception))]
-        public void ProcesarRespuesta_InvalidSignature_Exception()
+        [TestMethod]        
+        public void UT_CfdiConsultaRelacionados_InvalidSignature_Exception()
         {            
             //_solicitud.Signature.SignatureValue = Encoding.UTF8.GetBytes("HolaMundo");
             PeticionConsultaRelacionados solicitud = new PeticionConsultaRelacionados()
@@ -88,7 +87,38 @@ namespace SAT.CfdiConsultaRelacionados_UT
                 Signature = _solicitud.Signature
             };
             var response = _service.ProcesarRespuesta(solicitud);
-            Assert.IsTrue(response.Resultado.Contains("Clave: 2000 - Se encontraron CFDI relacionados"));
+            Assert.IsTrue(response.Resultado.Contains("Clave: 1003 - Los datos de la firma no son correctos."));
+        }
+
+        [TestMethod]
+        public void UT_CfdiConsultaRelacionados_1003()
+        {
+            //_solicitud.Signature.SignatureValue = Encoding.UTF8.GetBytes("HolaMundo");
+            PeticionConsultaRelacionados solicitud = new PeticionConsultaRelacionados()
+            {
+                RfcPacEnviaSolicitud = _solicitud.RfcPacEnviaSolicitud,
+                RfcReceptor = "AAN7008173R5",
+                Uuid = _solicitud.Uuid,
+                Signature = _solicitud.Signature
+            };
+            var response = _service.ProcesarRespuesta(solicitud);
+            Assert.IsTrue(response.Resultado.Contains("Clave: 1003 - Error: Los datos del certificado no son correctos"));
+        }
+
+        [TestMethod]
+        public void UT_CfdiConsultaRelacionados_302()
+        {
+            //_solicitud.Signature.SignatureValue = Encoding.UTF8.GetBytes("HolaMundo");
+            PeticionConsultaRelacionados solicitud = new PeticionConsultaRelacionados()
+            {
+                RfcPacEnviaSolicitud = _solicitud.RfcPacEnviaSolicitud,
+                RfcReceptor = _solicitud.RfcReceptor,
+                Uuid = _solicitud.Uuid,
+                Signature = _solicitud.Signature
+            };
+            solicitud.Signature.KeyInfo.X509Data.X509Certificate = null;
+            var response = _service.ProcesarRespuesta(solicitud);
+            Assert.IsTrue(response.Resultado.Contains("Clave: 302 - Error: No se cuenta con al menos una firma en el documento"));
         }
     }
 }
