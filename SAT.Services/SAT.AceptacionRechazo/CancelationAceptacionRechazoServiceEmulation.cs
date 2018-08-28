@@ -67,11 +67,11 @@ namespace SAT.AceptacionRechazo
                     {
                         if (!Guid.TryParse(f.UUID, out uuid))
                         {
-                            fls.Add(new AcuseAceptacionRechazoFolios() {UUID = f.UUID, EstatusUUID = "1005" });
+                            fls.Add(new AcuseAceptacionRechazoFolios() {UUID = f.UUID, EstatusUUID = "1005", Respuesta = f.Respuesta.ToString() });
                         }
                         else
                         {
-                            fls.Add(new AcuseAceptacionRechazoFolios() { UUID = f.UUID, EstatusUUID = "1000" });
+                            fls.Add(new AcuseAceptacionRechazoFolios() { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
                         }
                     }
 
@@ -101,7 +101,7 @@ namespace SAT.AceptacionRechazo
                 List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
                 foreach (var f in solicitud.Folios)
                 {
-                    folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000" });
+                    folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
                 }
                 ar.Folios = folios.ToArray();
                 ar.Signature = solicitud.Signature;
