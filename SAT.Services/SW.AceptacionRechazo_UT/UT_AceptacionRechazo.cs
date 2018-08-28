@@ -87,7 +87,7 @@ namespace SAT.AceptacionRechazo_UT
             var res = _service.ProcesarRespuesta(solicitudAceptacionRechazo);
             
             Assert.IsTrue(res.CodEstatus == "1000");
-            Assert.IsTrue(res.Folios[0].Respuesta == "1005");
+            Assert.IsTrue(res.Folios[0].EstatusUUID == "1005");
         }
     }
 }
