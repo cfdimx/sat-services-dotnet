@@ -10,8 +10,10 @@ namespace SAT.Core.DL
 {
     public interface IDatabase
     {
-        void SaveDocument(IEntity document);
-        Document GetDocument(string uuid);
+        void SaveDocument(IDocument document);
+        void UpdateDocument(IDocument document);
+        void Save();
+        DocumentBase GetDocument(string uuid);
         
     }
 }

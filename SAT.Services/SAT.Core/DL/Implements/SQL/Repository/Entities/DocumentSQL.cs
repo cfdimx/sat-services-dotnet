@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SAT.Core.DL.Implements.SQL.Repository.Entities
 {
-    public class DocumentSQL : Document, IEntity
+    public class Document : DocumentBase
     {
     }
 }

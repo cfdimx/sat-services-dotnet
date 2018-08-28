@@ -11,23 +11,33 @@ namespace SAT.Core.DL.Implements.SQL
 {
     public class SQLDatabase : IDatabase
     {
-        private Repository<DocumentSQL> _db = null;
+        private Repository<Document> _db = null;
         public SQLDatabase(string connString)
         {
             if(_db == null)
             {
-                _db = new Repository<DocumentSQL>(new Context(connString));
+                _db = new Repository<Document>(new Context(connString));
             }
             
         }
-        public Document GetDocument(string uuid)
+        public DocumentBase GetDocument(string uuid)
         {
             return _db.GetById(uuid);
         }
 
-        public void SaveDocument(IEntity document)
+        public void SaveDocument(IDocument document)
         {
-            _db.Insert((DocumentSQL)document);
+            _db.Insert((Document)document);
+        }
+
+        public void Save()
+        {
+            _db.Save();
+        }
+
+        public void UpdateDocument(IDocument document)
+        {
+            _db.Update((Document)document);
         }
     }
 }

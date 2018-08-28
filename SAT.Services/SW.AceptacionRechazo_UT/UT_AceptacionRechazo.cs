@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SAT.AceptacionRechazo;
 using SAT.Core;
+using SAT.Core.DL;
+using SAT.Core.DL.Implements.SQL;
+using SAT.Core.DL.Implements.SQL.Repository.Entities;
 
 namespace SAT.AceptacionRechazo_UT
 {
@@ -28,6 +31,8 @@ namespace SAT.AceptacionRechazo_UT
             var result = ca.ObtenerPeticionesPendientes(receptor);
             Assert.AreEqual(result.CodEstatus, "1100");
         }
+
+      
 
         [TestMethod]
         public void UT_OK_AcceptReject()
@@ -89,5 +94,29 @@ namespace SAT.AceptacionRechazo_UT
             Assert.IsTrue(res.CodEstatus == "1000");
             Assert.IsTrue(res.Folios[0].EstatusUUID == "1005");
         }
+
+        [TestMethod]
+        public void UT_SQL_Implement()
+        {
+            string connString = "Server=sdt-services-test.database.windows.net;Database=SATEmulation;Uid=developeruser;Pwd=vp.1011c;";
+            SQLDatabase sql = new SQLDatabase(connString);
+            Database db = new Database(sql);
+            var id = Guid.NewGuid().ToString();
+            Document d = new Document() { UUID= id,
+                XmlUrl = "url xml",
+                CodigoEstatus ="200",
+                EsCancelable = "cancelable con aceptacion",
+                EstatusCancelacion = "en proceso",
+                Estado = "estado"};
+            db.SaveDocument(d);
+            db.Save();
+
+            var retrieveDoc = db.GetDocument(id);
+
+            Assert.IsTrue(id == retrieveDoc.UUID);
+            
+        }
+
+       
     }
 }

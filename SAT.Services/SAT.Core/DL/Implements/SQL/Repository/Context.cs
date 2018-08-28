@@ -14,6 +14,8 @@ namespace SAT.Core.DL.Implements.SQL.Repository
         {
 
         }
-        public DbSet<DocumentSQL> Documents { get; set; }
+        public DbSet<Document> Documents { get; set; }
+
+       
     }
 }

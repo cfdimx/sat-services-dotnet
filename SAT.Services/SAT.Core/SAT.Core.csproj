@@ -76,7 +76,9 @@
   <ItemGroup>
     <Compile Include="CanonicalizationMethodType.cs" />
     <Compile Include="DigestMethodType.cs" />
-    <Compile Include="DL\Entities\Document.cs" />
+    <Compile Include="DL\Database.cs" />
+    <Compile Include="DL\Entities\DocumentBase.cs" />
+    <Compile Include="DL\Entities\IDocument.cs" />
     <Compile Include="DL\IDatabase.cs" />
     <Compile Include="DL\Implements\SQL\Repository\Context.cs" />
     <Compile Include="DL\Implements\SQL\Repository\Entities\DocumentSQL.cs" />
