@@ -48,6 +48,16 @@ namespace SAT.AceptacionRechazo
                     return ar;
                 }
                 Guid uuid = Guid.Empty;
+                if(solicitud.Folios == null)
+                {
+                    ar.CodEstatus = "301";
+                    return ar;
+                }
+                if(solicitud.Folios.Length < 1)
+                {
+                    ar.CodEstatus = "301";
+                    return ar;
+                }
                 
                 if(solicitud.Folios.Any(w => !Guid.TryParse(w.UUID, out uuid)))
                 {
@@ -57,11 +67,11 @@ namespace SAT.AceptacionRechazo
                     {
                         if (!Guid.TryParse(f.UUID, out uuid))
                         {
-                            fls.Add(new AcuseAceptacionRechazoFolios() {UUID = f.UUID, Respuesta = "1005" });
+                            fls.Add(new AcuseAceptacionRechazoFolios() {UUID = f.UUID, EstatusUUID = "1005" });
                         }
                         else
                         {
-                            fls.Add(new AcuseAceptacionRechazoFolios() { UUID = f.UUID, Respuesta = "1000" });
+                            fls.Add(new AcuseAceptacionRechazoFolios() { UUID = f.UUID, EstatusUUID = "1000" });
                         }
                     }
 
