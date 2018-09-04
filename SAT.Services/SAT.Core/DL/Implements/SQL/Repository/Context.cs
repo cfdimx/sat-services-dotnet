@@ -1,4 +1,5 @@
-﻿using SAT.Core.DL.Implements.SQL.Repository.Entities;
+﻿using SAT.Core.DL.Entities;
+using SAT.Core.DL.Implements.SQL.Repository.Entities;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -15,7 +16,8 @@ namespace SAT.Core.DL.Implements.SQL.Repository
 
         }
         public DbSet<Document> Documents { get; set; }
+        public DbSet<Relation> Relations { get; set; }
+        public DbSet<PendingCancelation> PendingCancelations { get; set; }
 
-       
     }
 }

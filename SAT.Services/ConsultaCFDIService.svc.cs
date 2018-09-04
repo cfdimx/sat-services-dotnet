@@ -5,6 +5,10 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using SAT.ConsultaCFDI;
+using SAT.Core.DL.DAO.Cancelation;
+using SAT.Core.DL.DAO.Pendings;
+using SAT.Core.DL.DAO.Reception;
+using SAT.Core.DL.Implements.SQL;
 
 namespace SAT.Services
 {
@@ -15,7 +19,10 @@ namespace SAT.Services
         public SAT.ConsultaCFDI.IConsultaCFDIServiceEmulation _service;
         public ConsultaCFDIService()
         {
-            _service = new ConsultaCFDIServiceEmulation();
+            ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
+            CancelationDAO cancelation = new CancelationDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
+            PendingsDAO pendings = new PendingsDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
+            _service = new ConsultaCFDIServiceEmulation(reception,cancelation, pendings);
         }
         public Acuse Consulta(string expresionImpresa)
         {

@@ -38,6 +38,9 @@
     <OutputPath>bin\x64\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
@@ -55,7 +58,18 @@
     <Compile Include="ConsultaCFDIServiceEmulation.cs" />
     <Compile Include="IConsultaCFDIServiceEmulation.cs" />
     <Compile Include="Models\Acuse.cs" />
+    <Compile Include="Models\ExpresionImpresa.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="_PendingsDAO.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAT.Core\SAT.Core.csproj">
+      <Project>{555b51d8-9bf2-4e27-b9e0-89ac2845d563}</Project>
+      <Name>SAT.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

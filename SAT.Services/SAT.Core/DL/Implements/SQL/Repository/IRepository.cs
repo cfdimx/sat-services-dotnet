@@ -12,7 +12,8 @@ namespace SAT.Core.DL.Implements.SQL.Repository
         void Insert(T entity);
         void Delete(T entity);
         void Update(T entity);
-        T GetById(string id);
+        IEnumerable<T> GetAll(Expression<Func<T, bool>> whereCondition);
+        
         
     }
 }

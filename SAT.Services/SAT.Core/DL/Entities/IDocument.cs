@@ -10,4 +10,14 @@ namespace SAT.Core.DL.Entities
     {
         string UUID { get; }
     }
+
+    public interface IEntity
+    {
+
+    }
+
+    public interface IRelation
+    {
+
+    }
 }

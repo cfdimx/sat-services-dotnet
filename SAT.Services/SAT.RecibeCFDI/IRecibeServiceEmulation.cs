@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SAT.Core.DL.Implements.SQL.Repository
+namespace SAT.RecibeCFDI
 {
-    public interface IEntity
+    public interface IRecibeServiceEmulation
     {
-        string UUID { get; }
+        AcuseRecepcion Recibe(CFDI cFDI);
     }
 }

@@ -1,3 +1,5 @@
+using SAT.Core.DL.DAO.Cancelation;
+using SAT.Core.DL.DAO.Pendings;
 using SAT.Core.Helpers;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,14 @@ namespace SAT.AceptacionRechazo
 {
     public class CancelationAceptacionRechazoServiceEmulation : ICancelationAceptacionRechazoServiceEmulation
     {
+        PendingsDAO _pendings;
+        CancelationDAO _cancelation;
+        public CancelationAceptacionRechazoServiceEmulation(PendingsDAO pendings, CancelationDAO cancelation)
+        {
+            _pendings = pendings;
+            _cancelation = cancelation;
+        }
+
         public AcusePeticionesPendientes ObtenerPeticionesPendientes(string rfcReceptor)
         {          
             AcusePeticionesPendientes response = new AcusePeticionesPendientes();
@@ -20,9 +30,24 @@ namespace SAT.AceptacionRechazo
                 response.CodEstatus = "305";
                 return response;
             }
-            response.CodEstatus = "1100";
-            string[] uuids = { Guid.NewGuid().ToString() };
-            response.UUID = uuids;
+            List<string> uuids = new List<string>();
+            var pendings = _pendings.GetPendings(rfcReceptor);
+            if(pendings.ToArray().Length == 0)
+            {
+                response.CodEstatus = "1101";
+            }
+            else
+            {
+                response.CodEstatus = "1100";
+            }
+            foreach (var p in pendings)
+            {
+                uuids.Add(p.UUID);
+            }
+            
+           
+            
+            response.UUID = uuids.ToArray();
             return response;
         }
         public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud)
@@ -51,6 +76,11 @@ namespace SAT.AceptacionRechazo
                     ar.CodEstatus = "301";
                     return ar;
                 }
+                if (!_pendings.HasPendings(solicitud.RfcReceptor))
+                {
+                    ar.CodEstatus = "1101";
+                    return ar;
+                }
                 
                 if(solicitud.Folios.Any(w => !Guid.TryParse(w.UUID, out uuid)))
                 {
@@ -62,10 +92,7 @@ namespace SAT.AceptacionRechazo
                         {
                             fls.Add(new AcuseAceptacionRechazoFolios() {UUID = f.UUID, EstatusUUID = "1005", Respuesta = f.Respuesta.ToString() });
                         }
-                        else
-                        {
-                            fls.Add(new AcuseAceptacionRechazoFolios() { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
-                        }
+                        
                     }
 
                     ar.Folios = fls.ToArray();
@@ -94,6 +121,7 @@ namespace SAT.AceptacionRechazo
                 List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
                 foreach (var f in solicitud.Folios)
                 {
+                    ExecuteAction(f);
                     folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
                 }
                 ar.Folios = folios.ToArray();
@@ -111,6 +139,18 @@ namespace SAT.AceptacionRechazo
             }
             
             
+        }
+
+        private void ExecuteAction(SolicitudAceptacionRechazoFolios folio)
+        {
+            if(folio.Respuesta == TipoAccionPeticionCancelacion.Aceptacion)
+            {
+                _cancelation.CancelDocument(folio.UUID);
+            }
+            else
+            {
+                _cancelation.NormalizeDocument(folio.UUID);
+            }
         }
      }
 }

@@ -6,6 +6,10 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using SAT.CancelaCFD;
+using SAT.Core.DL.DAO.Cancelation;
+using SAT.Core.DL.DAO.Pendings;
+using SAT.Core.DL.DAO.Reception;
+using SAT.Core.DL.Implements.SQL;
 
 namespace SAT.Services
 {
@@ -16,7 +20,11 @@ namespace SAT.Services
         SAT.CancelaCFD.ICancelaCFDBindingEmulation _service;
         public CancelaCFDBinding()
         {
-            _service = new CancelaCFDBindingEmulation();
+            CancelationDAO cancelation = CancelationDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
+            PendingsDAO pendings = PendingsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
+            ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
+
+            _service = new CancelaCFDBindingEmulation(cancelation,pendings, reception);
         }
         public Acuse CancelaCFD(Cancelacion Cancelacion)
         {

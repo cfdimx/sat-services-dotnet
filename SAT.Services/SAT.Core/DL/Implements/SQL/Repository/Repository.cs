@@ -1,6 +1,7 @@
 ﻿using SAT.Core.DL.Entities;
 using SAT.Core.DL.Implements.SQL.Repository;
 using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using System.Linq.Expressions;
@@ -9,7 +10,7 @@ using System.Linq.Expressions;
 
 namespace SAT.Core.DL.Implements.SQL.Repository
 {
-    public class Repository<T> : IRepository<T> where T : class, IDocument
+    public class Repository<T> : IRepository<T> where T : class, IEntity
     {
         protected DbSet<T> DataTable;
         private DbContext _dataContext;
@@ -25,6 +26,7 @@ namespace SAT.Core.DL.Implements.SQL.Repository
         {
             DataTable.Add(entity);
             _dataContext.SaveChanges();
+         
 
         }
 
@@ -34,14 +36,7 @@ namespace SAT.Core.DL.Implements.SQL.Repository
             _dataContext.SaveChanges();
         }
 
-      
-
-
-        public T GetById(string id)
-        {
-
-            return DataTable.Where(w => w.UUID == id).FirstOrDefault();
-        }
+     
 
         public void Save()
         {
@@ -52,6 +47,14 @@ namespace SAT.Core.DL.Implements.SQL.Repository
         {
             _dataContext.Entry(entity).State = System.Data.Entity.EntityState.Modified;
             _dataContext.SaveChanges();
+        }
+
+        
+
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>> whereCondition)
+        {
+           
+            return DataTable.Where(whereCondition);
         }
 
 

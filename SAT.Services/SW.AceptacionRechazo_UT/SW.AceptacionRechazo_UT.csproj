@@ -118,10 +118,29 @@
       <Project>{10b30a6f-a660-453d-a132-4ae44b130765}</Project>
       <Name>SAT.AceptacionRechazo</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SAT.CancelaCFD\SAT.CancelaCFD.csproj">
+      <Project>{1a29102e-4a26-4957-bb71-9145e6fb1d5e}</Project>
+      <Name>SAT.CancelaCFD</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAT.CfdiConsultaRelacionados\SAT.CfdiConsultaRelacionados.csproj">
+      <Project>{5aa844e1-b2df-4f6e-884b-8ce5b57632e3}</Project>
+      <Name>SAT.CfdiConsultaRelacionados</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAT.ConsultaCFDI\SAT.ConsultaCFDI.csproj">
+      <Project>{bb5cd776-c385-4684-9d5e-657afe2df06e}</Project>
+      <Name>SAT.ConsultaCFDI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SAT.Core\SAT.Core.csproj">
       <Project>{555b51d8-9bf2-4e27-b9e0-89ac2845d563}</Project>
       <Name>SAT.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SAT.RecibeCFDI\SAT.RecibeCFDI.csproj">
+      <Project>{15533b47-2375-470e-9a9f-9d8a9b5deb9e}</Project>
+      <Name>SAT.RecibeCFDI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="resources\" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
