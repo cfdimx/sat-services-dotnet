@@ -8,12 +8,29 @@ using System.Threading.Tasks;
 using SAT.Core.Helpers;
 using System.ServiceModel;
 using System.Security.Cryptography.X509Certificates;
+using SAT.Core.DL.DAO.Cancelation;
+using SAT.Core.DL.DAO.Pendings;
+using SAT.Core.DL.DAO.Reception;
+using SAT.Core.DL.Implements.SQL.Repository.Entities;
+using SAT.Core.DL.DAO.Relations;
 
 namespace SAT.CancelaCFD
 {
     [ServiceBehavior(Namespace = "http://cancelacfd.sat.gob.mx", AddressFilterMode = AddressFilterMode.Any)]
     public class CancelaCFDBindingEmulation : ICancelaCFDBindingEmulation
     {
+        CancelationDAO _cancelation;
+        PendingsDAO _pendings;
+        ReceptionDAO _reception;
+        RelationsDAO _relations;
+        public CancelaCFDBindingEmulation(CancelationDAO cancelation, PendingsDAO pendings, ReceptionDAO reception, RelationsDAO relations)
+        {
+            _cancelation = cancelation;
+            _pendings = pendings;
+            _reception = reception;
+            _relations = relations;
+        }
+
         public Acuse CancelaCFD(Cancelacion cancelacion)
         {
             string xml = string.Empty;
@@ -68,7 +85,40 @@ namespace SAT.CancelaCFD
             acuse.RfcEmisor = cancelacion.RfcEmisor;
             acuse.Signature = cancelacion.Signature;
 
+            CancelFolios(cancelacion.Folios);
             return acuse;
         }
+
+        private void CancelFolios(CancelacionFolios[] folios)
+        {
+            foreach (var f in folios)
+            {
+
+                if (IsCancelledByTime(f.UUID))
+                {
+                    _cancelation.StartCancelDocument(f.UUID);
+                    _pendings.SendPending(f.UUID);
+                }
+                else
+                {
+                    _cancelation.CancelDocument(f.UUID);
+                }
+               
+                
+            }
+        }
+
+        private bool IsCancelledByTime(string uuid)
+        {
+            var doc = _reception.GetDocumentByUUID(uuid);
+            var minutes = (int)(DateTime.Now - doc.FechaEmision).TotalMinutes;
+            return minutes > 15;
+        }
+
+       
+
+
+
+
     }
 }

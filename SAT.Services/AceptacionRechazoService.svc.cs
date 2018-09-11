@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using SAT.AceptacionRechazo;
+using SAT.Core.DL.DAO.Cancelation;
+using SAT.Core.DL.DAO.Pendings;
+using SAT.Core.DL.Implements.SQL;
 
 namespace SAT.Services
 {
@@ -16,7 +20,11 @@ namespace SAT.Services
         ICancelationAceptacionRechazoServiceEmulation _service;
         public AceptacionRechazoServiceClient()
         {
-            _service = new CancelationAceptacionRechazoServiceEmulation();
+            string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
+          
+            PendingsDAO pendings = PendingsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            CancelationDAO cancelation = CancelationDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            _service = new CancelationAceptacionRechazoServiceEmulation(pendings, cancelation);
         }
         public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud)
         {

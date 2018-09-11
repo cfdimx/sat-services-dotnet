@@ -43,5 +43,6 @@ namespace SAT.Core.Helpers
 
             return bValidaEstructuraRFC;
         }
+
     }
 }
