@@ -38,14 +38,7 @@ namespace SAT.AceptacionRechazo_UT
             _receptionService = new RecibeServiceEmulation(_relations, _reception, Environment.GetEnvironmentVariable("EMULATION_SAS"));
             _solicitud = Core.Helpers.XmlHelper.DeserealizeDocument<SolicitudAceptacionRechazo>(Core.Helpers.XmlHelper.RemoveInvalidCharsXml(solicitudXML));
         }
-        //[TestMethod]
-        //public void UT_OK_Pendings()
-        //{
-        //    CancelationAceptacionRechazoServiceEmulation ca = new CancelationAceptacionRechazoServiceEmulation();
-        //    string receptor = "LAN7008173R5";
-        //    var result = ca.ObtenerPeticionesPendientes(receptor);
-        //    Assert.AreEqual(result.CodEstatus, "1100");
-        //}
+    
 
 
 
@@ -110,103 +103,8 @@ namespace SAT.AceptacionRechazo_UT
             Assert.IsTrue(res.Folios[0].EstatusUUID == "1005");
         }
 
-        [TestMethod]
-        public void UT_SQL_Implement_Insert()
-        {
-            string connString = "Server=sdt-services-test.database.windows.net;Database=SATEmulation;Uid=developeruser;Pwd=vp.1011c;";
-            SQLDatabase sql = new SQLDatabase(connString);
-            Database db = new Database(sql);
-            var id = Guid.NewGuid().ToString();
-            Document d = new Document() { UUID= id,
-                XmlUrl = "url xml",
-                CodigoEstatus ="200",
-                EsCancelable = "cancelable con aceptacion",
-                EstatusCancelacion = "en proceso",
-                Estado = "estado"};
-            db.SaveDocument(d);
-            
-
-            var retrieveDoc = db.GetDocumentByUUID(id);
-
-            Assert.IsTrue(id == retrieveDoc.UUID);
-
-            db.Delete(retrieveDoc);
-            
-            
-        }
-
-        [TestMethod]
-        public void UT_SQL_Implement_Delete()
-        {
-            string connString = "Server=sdt-services-test.database.windows.net;Database=SATEmulation;Uid=developeruser;Pwd=vp.1011c;";
-            SQLDatabase sql = new SQLDatabase(connString);
-            Database db = new Database(sql);
-            var id = Guid.NewGuid().ToString();
-            Document d = new Document()
-            {
-                UUID = id,
-                XmlUrl = "url xml",
-                CodigoEstatus = "200",
-                EsCancelable = "cancelable con aceptacion",
-                EstatusCancelacion = "en proceso",
-                Estado = "estado"
-            };
-            db.SaveDocument(d);
-
-
-            var retrieveDoc = db.GetDocumentByUUID(id);
-
-           
-
-            db.Delete(retrieveDoc);
-
-            retrieveDoc = db.GetDocumentByUUID(id);
-
-            Assert.IsTrue(retrieveDoc == null);
-
-
-        }
-
-        [TestMethod]
-        public void UT_SQL_Implement_Update()
-        {
-            string connString = "Server=sdt-services-test.database.windows.net;Database=SATEmulation;Uid=developeruser;Pwd=vp.1011c;";
-            SQLDatabase sql = new SQLDatabase(connString);
-            Database db = new Database(sql);
-            var id = Guid.NewGuid().ToString();
-            string statusCode = "2000";
-            Document d = new Document()
-            {
-                UUID = id,
-                XmlUrl = "url xml",
-                CodigoEstatus = statusCode,
-                EsCancelable = "cancelable con aceptacion",
-                EstatusCancelacion = "en proceso",
-                Estado = "estado"
-            };
-            db.SaveDocument(d);
-
-             
-
-            var retrieveDocCopy = db.GetDocumentByUUID(id);
-
-            retrieveDocCopy.CodigoEstatus = "1000";
-
-            db.Update(retrieveDocCopy);
-
-            var retrieveDoc2 = db.GetDocumentByUUID(id);
-
-            Assert.IsTrue(statusCode != retrieveDoc2.CodigoEstatus);
-
-            db.Delete(retrieveDoc2);
-
-
-        }
-
-        [TestMethod]
-        public void UT_Recepcion_auth()
-        {
-           
+     
+ 
         }
 
 
