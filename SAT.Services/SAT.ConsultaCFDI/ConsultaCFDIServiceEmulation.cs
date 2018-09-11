@@ -38,7 +38,7 @@ namespace SAT.ConsultaCFDI
             var dict = HttpUtility.ParseQueryString(expresionImpresa);
             string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
-            //Document query = _reception.ConsultaCFDI(respObj.tt,respObj.id, respObj.rr, respObj.re);
+            
             Document query = _reception.GetDocumentByUUID(respObj.id);
             if (_relations.GetRelationsParents(query.UUID).ToArray().Length > 0)
             {
