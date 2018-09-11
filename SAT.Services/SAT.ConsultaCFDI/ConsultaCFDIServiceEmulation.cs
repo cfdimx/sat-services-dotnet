@@ -91,7 +91,7 @@ namespace SAT.ConsultaCFDI
         {
             //TODO: esto es para no esperar 10 mins, al subir poner 10
             var minutes = (int)(DateTime.Now - doc.FechaEmision ).TotalMinutes;
-            return minutes > 1;// <---- aqui
+            return minutes > 10;// <---- aqui
         }
 
         private bool IsAutoCancel(Document doc)

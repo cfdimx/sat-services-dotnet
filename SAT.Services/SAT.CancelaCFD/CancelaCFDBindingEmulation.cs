@@ -112,7 +112,7 @@ namespace SAT.CancelaCFD
         {
             var doc = _reception.GetDocumentByUUID(uuid);
             var minutes = (int)(DateTime.Now - doc.FechaEmision).TotalMinutes;
-            return minutes > 1;// <---- aqui
+            return minutes > 15;
         }
 
        
