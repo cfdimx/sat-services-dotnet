@@ -4,6 +4,7 @@ using SAT.Core.DL;
 using SAT.Core.DL.DAO.Cancelation;
 using SAT.Core.DL.DAO.Pendings;
 using SAT.Core.DL.DAO.Reception;
+using SAT.Core.DL.DAO.Relations;
 using SAT.Core.DL.Implements.SQL;
 using SAT.Core.DL.Implements.SQL.Repository.Entities;
 using System;
@@ -23,11 +24,13 @@ namespace SAT.ConsultaCFDI
         private ReceptionDAO _reception;
         private CancelationDAO _cancelation;
         private PendingsDAO _pendings;
-        public ConsultaCFDIServiceEmulation(ReceptionDAO reception, CancelationDAO cancelation, PendingsDAO pendings)
+        private RelationsDAO _relations;
+        public ConsultaCFDIServiceEmulation(ReceptionDAO reception, CancelationDAO cancelation, PendingsDAO pendings, RelationsDAO relations)
         {
             _pendings = pendings;
             _cancelation = cancelation;
             _reception = reception;
+            _relations = relations;
         }
         public Acuse Consulta(string expresionImpresa)
         {
@@ -37,28 +40,40 @@ namespace SAT.ConsultaCFDI
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
             //Document query = _reception.ConsultaCFDI(respObj.tt,respObj.id, respObj.rr, respObj.re);
             Document query = _reception.GetDocumentByUUID(respObj.id);
-           if( _pendings.GetPendingByUUID(query.UUID) == null)
+            if (_relations.GetRelationsParents(query.UUID).ToArray().Length > 0)
             {
-                if (IsCancelledByTime(query))
-                {
-
-                    acuse.EsCancelable = "Cancelable con aceptacion";
-                }
-                else
-                {
-                    
-                    acuse.EsCancelable = "Cancelable sin aceptacion";
-                }
+                acuse.EsCancelable = "No cancelable";
             }
             else
             {
-                if (IsAutoCancel(query))
+                if (_pendings.GetPendingByUUID(query.UUID) == null)
                 {
-                    
-                    _cancelation.CancelDocument(query.UUID);
+                    if (IsCancelledByTime(query))
+                    {
+                        acuse.EsCancelable = "Cancelable con aceptacion";
+
+
+                    }
+
+                    else
+                    {
+                        acuse.EsCancelable = "Cancelable sin aceptacion";
+
+
+                    }
                 }
-                acuse.EsCancelable = "Cancelable con aceptacion";
+
+                else
+                {
+                    if (IsAutoCancel(query))
+                    {
+
+                        _cancelation.CancelDocument(query.UUID);
+                    }
+                    acuse.EsCancelable = "Cancelable con aceptacion";
+                }
             }
+            
             
 
             

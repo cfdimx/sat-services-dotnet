@@ -88,8 +88,10 @@ namespace SAT.AceptacionRechazo
                     ar.CodEstatus = "1000";
                     foreach (var f in solicitud.Folios)
                     {
+
                         if (!Guid.TryParse(f.UUID, out uuid))
                         {
+                            f.UUID = f.UUID.ToUpper();
                             fls.Add(new AcuseAceptacionRechazoFolios() {UUID = f.UUID, EstatusUUID = "1005", Respuesta = f.Respuesta.ToString() });
                         }
                         
@@ -121,6 +123,7 @@ namespace SAT.AceptacionRechazo
                 List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
                 foreach (var f in solicitud.Folios)
                 {
+                    f.UUID = f.UUID.ToUpper();
                     ExecuteAction(f);
                     folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
                 }

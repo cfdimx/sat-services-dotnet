@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -8,6 +9,7 @@ using SAT.ConsultaCFDI;
 using SAT.Core.DL.DAO.Cancelation;
 using SAT.Core.DL.DAO.Pendings;
 using SAT.Core.DL.DAO.Reception;
+using SAT.Core.DL.DAO.Relations;
 using SAT.Core.DL.Implements.SQL;
 
 namespace SAT.Services
@@ -19,10 +21,12 @@ namespace SAT.Services
         public SAT.ConsultaCFDI.IConsultaCFDIServiceEmulation _service;
         public ConsultaCFDIService()
         {
-            ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-            CancelationDAO cancelation = new CancelationDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-            PendingsDAO pendings = new PendingsDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-            _service = new ConsultaCFDIServiceEmulation(reception,cancelation, pendings);
+            string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
+            ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            CancelationDAO cancelation = new CancelationDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            PendingsDAO pendings = new PendingsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            RelationsDAO relations = new RelationsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            _service = new ConsultaCFDIServiceEmulation(reception,cancelation, pendings, relations);
         }
         public Acuse Consulta(string expresionImpresa)
         {

@@ -5,6 +5,9 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using SAT.CfdiConsultaRelacionados;
+using SAT.Core.DL.DAO.Reception;
+using SAT.Core.DL.DAO.Relations;
+using SAT.Core.DL.Implements.SQL;
 
 namespace SAT.Services
 {
@@ -15,7 +18,10 @@ namespace SAT.Services
         ICfdiConsultaRelacionadosServiceEmulation _service;
         public CfdiConsultaRelacionadosService()
         {
-            _service = new CfdiConsultaRelacionadosServiceEmulation();
+            string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
+            RelationsDAO relations = RelationsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            ReceptionDAO reception = ReceptionDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            _service = new CfdiConsultaRelacionadosServiceEmulation(relations, reception);
         }
         public ConsultaRelacionados ProcesarRespuesta(PeticionConsultaRelacionados solicitud)
         {

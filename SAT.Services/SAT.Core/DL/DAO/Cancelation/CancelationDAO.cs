@@ -44,6 +44,14 @@ namespace SAT.Core.DL.DAO.Cancelation
             doc.Estado = "Cancelado";
 
             _db.Update(doc);
+            var relations = _db.GetRelationsChildren(uuid);
+            if (relations != null)
+            {
+                foreach (var r in relations)
+                {
+                    _db.DeleteRelations(r);
+                }
+            }
         }
 
         public void NormalizeDocument(string uuid)

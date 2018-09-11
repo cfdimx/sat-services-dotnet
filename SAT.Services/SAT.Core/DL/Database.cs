@@ -51,7 +51,10 @@ namespace SAT.Core.DL
         {
             _db.SaveRelation(relation);
         }
-
+        public void DeleteRelations(Relation relation)
+        {
+            _db.DeleteRelation(relation);
+        }
         public IEnumerable<Relation> GetRelationsParents(string uuid)
         {
             return _db.GetRelationsParents(uuid);
@@ -61,6 +64,7 @@ namespace SAT.Core.DL
         {
             return _db.GetRelationsChildren(uuid);
         }
+      
 
 
 

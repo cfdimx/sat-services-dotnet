@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data.Entity;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -19,9 +20,11 @@ namespace SAT.Services
         private IRecibeServiceEmulation _service;
         public RecibeCFDIService()
         {
-            RelationsDAO relations = RelationsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-            ReceptionDAO reception = ReceptionDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-            _service = new RecibeServiceEmulation(relations, reception, Environment.GetEnvironmentVariable("EMULATION_SAS"));
+            string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
+            string emulation_sas = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(System.Environment.GetEnvironmentVariable("EMULATION_SAS")));
+            RelationsDAO relations = RelationsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            ReceptionDAO reception = ReceptionDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            _service = new RecibeServiceEmulation(relations, reception, emulation_sas);
         }
         public AcuseRecepcion Recibe(CFDI cFDI)
         {

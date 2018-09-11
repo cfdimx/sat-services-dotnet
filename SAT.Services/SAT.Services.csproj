@@ -15,9 +15,9 @@
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <WcfConfigValidationEnabled>True</WcfConfigValidationEnabled>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <Use64BitIISExpress />
-    <IISExpressSSLPort />
+    <IISExpressSSLPort>44311</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
@@ -49,6 +49,7 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -68,6 +69,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Autenticacion.svc" />
     <Content Include="CancelaCFDService.svc" />
     <Content Include="AceptacionRechazoService.svc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -76,9 +78,14 @@
     <Content Include="ConsultaCFDIService.svc" />
     <Content Include="Global.asax" />
     <Content Include="RecibeCFDIService.svc" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Autenticacion.svc.cs">
+      <DependentUpon>Autenticacion.svc</DependentUpon>
+    </Compile>
     <Compile Include="CancelaCFDService.svc.cs">
       <DependentUpon>CancelaCFDService.svc</DependentUpon>
     </Compile>
@@ -92,9 +99,11 @@
     <Compile Include="ConsultaCFDIService.svc.cs">
       <DependentUpon>ConsultaCFDIService.svc</DependentUpon>
     </Compile>
+    <Compile Include="CustomX509CertificateValidator.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="IAutenticacion.cs" />
     <Compile Include="ICancelaCFDBinding.cs" />
     <Compile Include="ICancelationAceptacionRechazoService.cs" />
     <Compile Include="ICfdiConsultaRelacionadosService.cs" />
@@ -109,7 +118,9 @@
     <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -118,6 +129,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SAT.Autenticacion\SAT.Autenticacion.csproj">
+      <Project>{a94a8d15-faba-4326-859f-e5b159c25517}</Project>
+      <Name>SAT.Autenticacion</Name>
+    </ProjectReference>
     <ProjectReference Include="SAT.AceptacionRechazo\SAT.AceptacionRechazo.csproj">
       <Project>{10b30a6f-a660-453d-a132-4ae44b130765}</Project>
       <Name>SAT.AceptacionRechazo</Name>
@@ -166,7 +181,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>65044</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:65044/</IISUrl>
+          <IISUrl>https://localhost/SAT.Services</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

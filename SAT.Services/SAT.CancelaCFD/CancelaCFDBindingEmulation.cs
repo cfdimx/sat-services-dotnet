@@ -12,6 +12,7 @@ using SAT.Core.DL.DAO.Cancelation;
 using SAT.Core.DL.DAO.Pendings;
 using SAT.Core.DL.DAO.Reception;
 using SAT.Core.DL.Implements.SQL.Repository.Entities;
+using SAT.Core.DL.DAO.Relations;
 
 namespace SAT.CancelaCFD
 {
@@ -21,11 +22,13 @@ namespace SAT.CancelaCFD
         CancelationDAO _cancelation;
         PendingsDAO _pendings;
         ReceptionDAO _reception;
-        public CancelaCFDBindingEmulation(CancelationDAO cancelation, PendingsDAO pendings, ReceptionDAO reception)
+        RelationsDAO _relations;
+        public CancelaCFDBindingEmulation(CancelationDAO cancelation, PendingsDAO pendings, ReceptionDAO reception, RelationsDAO relations)
         {
             _cancelation = cancelation;
             _pendings = pendings;
             _reception = reception;
+            _relations = relations;
         }
 
         public Acuse CancelaCFD(Cancelacion cancelacion)
@@ -111,6 +114,8 @@ namespace SAT.CancelaCFD
             var minutes = (int)(DateTime.Now - doc.FechaEmision).TotalMinutes;
             return minutes > 1;// <---- aqui
         }
+
+       
 
 
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
@@ -9,6 +10,7 @@ using SAT.CancelaCFD;
 using SAT.Core.DL.DAO.Cancelation;
 using SAT.Core.DL.DAO.Pendings;
 using SAT.Core.DL.DAO.Reception;
+using SAT.Core.DL.DAO.Relations;
 using SAT.Core.DL.Implements.SQL;
 
 namespace SAT.Services
@@ -20,11 +22,12 @@ namespace SAT.Services
         SAT.CancelaCFD.ICancelaCFDBindingEmulation _service;
         public CancelaCFDBinding()
         {
-            CancelationDAO cancelation = CancelationDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-            PendingsDAO pendings = PendingsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-            ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-
-            _service = new CancelaCFDBindingEmulation(cancelation,pendings, reception);
+            string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
+            CancelationDAO cancelation = CancelationDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            PendingsDAO pendings = PendingsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            RelationsDAO relations = new RelationsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            _service = new CancelaCFDBindingEmulation(cancelation,pendings, reception, relations);
         }
         public Acuse CancelaCFD(Cancelacion Cancelacion)
         {

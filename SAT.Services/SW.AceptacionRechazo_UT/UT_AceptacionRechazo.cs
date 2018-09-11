@@ -204,9 +204,9 @@ namespace SAT.AceptacionRechazo_UT
         }
 
         [TestMethod]
-        public void UT_Recepcion_CP1()
+        public void UT_Recepcion_auth()
         {
-
+           
         }
 
 

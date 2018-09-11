@@ -76,5 +76,14 @@ namespace SAT.Core.DL.DAO.Relations
                 return null;
             }
         }
+        public void DeleteParentRelations(string uuid)
+        {
+            var relations = _db.GetRelationsChildren(uuid);
+            
+            foreach (var r in relations)
+            {
+                _db.DeleteRelations(r);
+            }
+        }
     }
 }
