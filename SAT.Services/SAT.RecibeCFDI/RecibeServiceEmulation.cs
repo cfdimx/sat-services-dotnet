@@ -179,11 +179,13 @@ namespace SAT.RecibeCFDI
                     xmlStr = wc.DownloadString(source);
                 }
                 var xmlDoc = new XmlDocument();
+                byte[] bytes = Encoding.Default.GetBytes(xmlStr);
+                xmlStr = Encoding.UTF8.GetString(bytes);
                 xmlDoc.LoadXml(xmlStr);
 
                 return xmlDoc;
             }
-            catch (Exception)
+            catch (Exception e)
             {
                 return null;
             }

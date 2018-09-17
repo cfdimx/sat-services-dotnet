@@ -24,7 +24,7 @@ namespace SAT.Services
         {
             string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
             CancelationDAO cancelation = CancelationDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            PendingsDAO pendings = PendingsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+            PendingsDAO pendings = new PendingsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
             ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
             RelationsDAO relations = new RelationsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
             _service = new CancelaCFDBindingEmulation(cancelation,pendings, reception, relations);
