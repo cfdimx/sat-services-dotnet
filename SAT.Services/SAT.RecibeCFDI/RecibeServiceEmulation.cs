@@ -185,7 +185,7 @@ namespace SAT.RecibeCFDI
 
                 return xmlDoc;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 return null;
             }
