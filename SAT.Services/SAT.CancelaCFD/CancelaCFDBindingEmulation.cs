@@ -77,7 +77,7 @@ namespace SAT.CancelaCFD
                     acusesFolios.Add(new AcuseFolios()
                     {
                         EstatusUUID = "201",
-                        UUID = folio.UUID
+                        UUID = folio.UUID.ToUpper()
                     });
                 }
                 acuse.Folios = acusesFolios.ToArray();
