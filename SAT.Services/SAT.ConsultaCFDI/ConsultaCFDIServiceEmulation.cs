@@ -92,7 +92,8 @@ namespace SAT.ConsultaCFDI
         private bool IsCancelledByTime(Document doc)
         {
             //TODO: esto es para no esperar 10 mins, al subir poner 10
-            var minutes = (int)(DateTime.Now - doc.FechaEmision ).TotalMinutes;
+
+            var minutes = (int)(GetCentralTime() - doc.FechaEmision ).TotalMinutes;
             return minutes > 10;// <---- aqui
         }
 
@@ -101,8 +102,15 @@ namespace SAT.ConsultaCFDI
             //TODO: esto es para no esperar 15 minutos, al subir poner 15
             var pending = _pendings.GetPendingByUUID(doc.UUID);
             if (pending == null) return false;
-            var minutes = (int)(DateTime.Now - pending.FechaSolicitud).TotalMinutes;
+            var minutes = (int)(GetCentralTime() - pending.FechaSolicitud).TotalMinutes;
             return minutes > 15;//<----------- aqui
+        }
+
+        private DateTime GetCentralTime()
+        {
+            TimeZoneInfo setTimeZoneInfo;
+            setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            return TimeZoneInfo.ConvertTime(DateTime.Now, setTimeZoneInfo);
         }
     }
 }

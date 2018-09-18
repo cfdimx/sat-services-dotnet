@@ -111,12 +111,17 @@ namespace SAT.CancelaCFD
         private bool IsCancelledByTime(string uuid)
         {
             var doc = _reception.GetDocumentByUUID(uuid);
-            var minutes = (int)(DateTime.Now - doc.FechaEmision).TotalMinutes;
+            var minutes = (int)(GetCentralTime() - doc.FechaEmision).TotalMinutes;
             return minutes > 15;
         }
 
-       
 
+        private DateTime GetCentralTime()
+        {
+            TimeZoneInfo setTimeZoneInfo;
+            setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            return TimeZoneInfo.ConvertTime(DateTime.Now, setTimeZoneInfo);
+        }
 
 
 
