@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -34,6 +35,7 @@ namespace SAT.ConsultaCFDI
         }
         public Acuse Consulta(string expresionImpresa)
         {
+            expresionImpresa = Regex.Replace(expresionImpresa, @"\t|\n|\r", "");
             Acuse acuse = new Acuse();
             var dict = HttpUtility.ParseQueryString(expresionImpresa);
             string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
