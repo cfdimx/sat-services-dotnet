@@ -68,6 +68,37 @@ namespace SAT.CancelaCFD
            
             acuse.Fecha = cancelationDate;
 
+            if (cancelacion.Folios.Any(w => _relations.GetRelationsParents(w.UUID)?.Count() > 0))
+            {
+                acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
+                var acusesFolios = new List<AcuseFolios>();
+                foreach (var folio in cancelacion.Folios)
+                {
+                    if (_relations.GetRelationsParents(folio.UUID).Count() > 0)
+                    {
+                        acusesFolios.Add(new AcuseFolios()
+                        {
+                            EstatusUUID = "301",
+                            UUID = folio.UUID.ToUpper()
+                        });
+                    }
+                    else
+                    {
+                        acusesFolios.Add(new AcuseFolios()
+                        {
+                            EstatusUUID = "201",
+                            UUID = folio.UUID.ToUpper()
+                        });
+                    }
+                    
+                }
+                acuse.Folios = acusesFolios.ToArray();
+
+                acuse.RfcEmisor = cancelacion.RfcEmisor;
+                acuse.Signature = cancelacion.Signature;
+                acuse.CodEstatus = "301";
+                return acuse;
+            }
             if (cancelacion.Folios?.Count() > 0)
             {
                 acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
