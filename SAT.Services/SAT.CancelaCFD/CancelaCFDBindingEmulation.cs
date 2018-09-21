@@ -124,8 +124,8 @@ namespace SAT.CancelaCFD
         {
             foreach (var f in folios)
             {
-
-                if (IsCancelledByTime(f.UUID))
+                var doc = _reception.GetDocumentByUUID(f.UUID);
+                if (IsCancelledByTime(f.UUID) || (!IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) || !IsEgresosNomina(doc)))
                 {
                     _cancelation.StartCancelDocument(f.UUID);
                     _pendings.SendPending(f.UUID);
@@ -137,6 +137,25 @@ namespace SAT.CancelaCFD
                
                 
             }
+        }
+
+        private bool IsGenerericRFC(Document cfdi)
+        {
+            string generic_rfc = "XAXX010101000";
+            return cfdi.RfcReceptor == generic_rfc;
+        }
+        private bool IsForeignRFC(Document cfdi)
+        {
+            string generic_rfc = "XEXX010101000";
+            return cfdi.RfcReceptor == generic_rfc;
+        }
+        private bool IsMore5K(Document cfd)
+        {
+            return decimal.Parse(cfd.Total) > 5000;
+        }
+        private bool IsEgresosNomina(Document document)
+        {
+            return document.TipoComprobante == "E" || document.TipoComprobante == "N";
         }
 
         private bool IsCancelledByTime(string uuid)
