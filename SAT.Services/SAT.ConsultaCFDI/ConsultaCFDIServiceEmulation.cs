@@ -59,7 +59,7 @@ namespace SAT.ConsultaCFDI
             {
                 if (_pendings.GetPendingByUUID(query.UUID) == null)
                 {
-                    if (IsCancelledByTime(query))
+                    if (IsCancelledByTime(query) && !IsGenerericRFC(query) && !IsForeignRFC(query) && !IsMore5K(query) && !IsEgresosNomina(query))
                     {
                         acuse.EsCancelable = "Cancelable con aceptacion";
 
@@ -96,8 +96,25 @@ namespace SAT.ConsultaCFDI
             return acuse;
         }
 
-        
 
+        private bool IsGenerericRFC(Document cfdi)
+        {
+            string generic_rfc = "XAXX010101000";
+            return cfdi.RfcReceptor == generic_rfc;
+        }
+        private bool IsForeignRFC(Document cfdi)
+        {
+            string generic_rfc = "XEXX010101000";
+            return cfdi.RfcReceptor == generic_rfc;
+        }
+        private bool IsMore5K(Document cfd)
+        {
+            return decimal.Parse(cfd.Total) > 5000;
+        }
+        private bool IsEgresosNomina(Document document)
+        {
+            return document.TipoComprobante == "E" || document.TipoComprobante == "N";
+        }
         private bool IsCancelledByTime(Document doc)
         {
             //TODO: esto es para no esperar 10 mins, al subir poner 10
