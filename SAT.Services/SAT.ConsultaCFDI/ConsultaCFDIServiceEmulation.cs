@@ -42,9 +42,18 @@ namespace SAT.ConsultaCFDI
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
             
             Document query = _reception.GetDocumentByUUID(respObj.id);
+            if (query == null)
+            {
+                acuse.Estado = "No encontrado";
+                acuse.CodigoEstatus = "N - 602: Comprobante no encontrado.";
+                acuse.EsCancelable = "";
+                acuse.EstatusCancelacion = "";
+                return acuse;
+            }
             if (_relations.GetRelationsParents(query.UUID).ToArray().Length > 0)
             {
                 acuse.EsCancelable = "No cancelable";
+                
             }
             else
             {
