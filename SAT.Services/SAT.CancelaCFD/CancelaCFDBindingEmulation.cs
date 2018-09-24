@@ -68,6 +68,38 @@ namespace SAT.CancelaCFD
            
             acuse.Fecha = cancelationDate;
 
+            if (cancelacion.Folios.Any(w => _pendings.GetPendingByUUID(w.UUID)!= null))
+            {
+                acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
+                var acusesFolios = new List<AcuseFolios>();
+                foreach (var folio in cancelacion.Folios)
+                {
+                    if (_pendings.GetPendingByUUID(folio.UUID) != null)
+                    {
+                        acusesFolios.Add(new AcuseFolios()
+                        {
+                            EstatusUUID = "1004",
+                            UUID = folio.UUID.ToUpper()
+                        });
+                    }
+                    else
+                    {
+                        acusesFolios.Add(new AcuseFolios()
+                        {
+                            EstatusUUID = "1000",
+                            UUID = folio.UUID.ToUpper()
+                        });
+                    }
+
+                }
+                acuse.Folios = acusesFolios.ToArray();
+
+                acuse.RfcEmisor = cancelacion.RfcEmisor;
+                acuse.Signature = cancelacion.Signature;
+                acuse.CodEstatus = "1004";
+                return acuse;
+            }
+
             if (cancelacion.Folios.Any(w => _relations.GetRelationsParents(w.UUID)?.Count() > 0))
             {
                 acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
@@ -124,22 +156,23 @@ namespace SAT.CancelaCFD
         {
             foreach (var f in folios)
             {
-                if (_pendings.GetPendingByUUID(f.UUID) != null)
+                var doc = _reception.GetDocumentByUUID(f.UUID);
+                if (IsCancelledByTime(f.UUID) && !IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) && !IsEgresosNomina(doc))
                 {
-                    var doc = _reception.GetDocumentByUUID(f.UUID);
-                    if (IsCancelledByTime(f.UUID) || (!IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) || !IsEgresosNomina(doc)))
+                    if (_pendings.GetPendingByUUID(f.UUID) == null)
                     {
                         _cancelation.StartCancelDocument(f.UUID);
                         _pendings.SendPending(f.UUID);
                     }
-                    else
-                    {
-                        _cancelation.CancelDocument(f.UUID);
-                    }
+                   
                 }
-                
-               
-                
+                else
+                {
+                    _cancelation.CancelDocument(f.UUID);
+                }
+
+
+
             }
         }
 
