@@ -67,6 +67,37 @@ namespace SAT.CancelaCFD
             DateTime cancelationDate = DateTime.Parse(string.Format("{0:s}", DateTime.UtcNow), CultureInfo.InvariantCulture);
            
             acuse.Fecha = cancelationDate;
+            if (cancelacion.Folios.Any(w => _reception.GetDocumentByUUID(w.UUID) == null))
+            {
+                acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
+                var acusesFolios = new List<AcuseFolios>();
+                foreach (var folio in cancelacion.Folios)
+                {
+                    if (_reception.GetDocumentByUUID(folio.UUID) == null)
+                    {
+                        acusesFolios.Add(new AcuseFolios()
+                        {
+                            EstatusUUID = "205",
+                            UUID = folio.UUID.ToUpper()
+                        });
+                    }
+                    else
+                    {
+                        acusesFolios.Add(new AcuseFolios()
+                        {
+                            EstatusUUID = "201",
+                            UUID = folio.UUID.ToUpper()
+                        });
+                    }
+
+                }
+                acuse.Folios = acusesFolios.ToArray();
+
+                acuse.RfcEmisor = cancelacion.RfcEmisor;
+                acuse.Signature = cancelacion.Signature;
+                acuse.CodEstatus = "205";
+                return acuse;
+            }
 
             if (cancelacion.Folios.Any(w => _pendings.GetPendingByUUID(w.UUID)!= null))
             {
