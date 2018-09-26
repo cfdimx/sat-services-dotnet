@@ -109,15 +109,15 @@ namespace SAT.CancelaCFD
                     {
                         acusesFolios.Add(new AcuseFolios()
                         {
-                            EstatusUUID = "1004",
+                            EstatusUUID = "202",
                             UUID = folio.UUID.ToUpper()
                         });
                     }
                     else
                     {
-                        acusesFolios.Add(new AcuseFolios()
-                        {
-                            EstatusUUID = "1000",
+                    acusesFolios.Add(new AcuseFolios()
+                    {
+                        EstatusUUID = "202",
                             UUID = folio.UUID.ToUpper()
                         });
                     }
