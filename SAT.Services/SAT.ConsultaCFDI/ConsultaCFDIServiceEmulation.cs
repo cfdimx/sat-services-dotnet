@@ -59,7 +59,7 @@ namespace SAT.ConsultaCFDI
             {
                 if (_pendings.GetPendingByUUID(query.UUID) == null)
                 {
-                    if (IsCancelledByTime(query) && !IsGenerericRFC(query) && !IsForeignRFC(query) && IsMore5K(query) && !IsEgresosNomina(query))
+                    if ( ( IsCancelledByTime(query) && !IsGenerericRFC(query) && !IsForeignRFC(query) && IsMore5K(query) && !IsEgresosNomina(query) ) || query.EstatusCancelacion == "Solicitud rechazada")
                     {
                         acuse.EsCancelable = "Cancelable con aceptacion";
 

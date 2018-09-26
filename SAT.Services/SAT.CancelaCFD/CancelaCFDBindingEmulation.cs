@@ -188,7 +188,7 @@ namespace SAT.CancelaCFD
             foreach (var f in folios)
             {
                 var doc = _reception.GetDocumentByUUID(f.UUID);
-                if (IsCancelledByTime(f.UUID) && !IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) && !IsEgresosNomina(doc))
+                if ( ( IsCancelledByTime(f.UUID) && !IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) && !IsEgresosNomina(doc) ) || doc.EstatusCancelacion == "Solicitud rechazada")
                 {
                     if (_pendings.GetPendingByUUID(f.UUID) == null)
                     {
@@ -199,6 +199,7 @@ namespace SAT.CancelaCFD
                 }
                 else
                 {
+                    
                     _cancelation.CancelDocument(f.UUID);
                 }
 

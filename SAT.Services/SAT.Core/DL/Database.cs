@@ -73,6 +73,12 @@ namespace SAT.Core.DL
             _db.SavePendingCancelation(pendingCancelation);
         }
 
+        public void DeletePending(string uuid)
+        {
+            var pend = _db.GetPendingCancelationsByUUID(uuid).FirstOrDefault() ;
+            _db.DeletePendingCancelation(pend);
+        }
+
         public IEnumerable<PendingCancelation> GetPendingCancelations(string rfcReceptor)
         {
             return _db.GetPendingCancelations(rfcReceptor);

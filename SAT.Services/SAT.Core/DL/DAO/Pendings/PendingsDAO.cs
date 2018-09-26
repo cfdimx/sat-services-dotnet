@@ -55,6 +55,10 @@ namespace SAT.Core.DL.DAO.Pendings
         {
             return _db.GetPendingCancelationsByUUID(uuid).FirstOrDefault();
         }
+        public void DeletePending(string uuid)
+        {
+            _db.DeletePending(uuid);
+        }
 
         public bool HasPendings(string rfc)
         {
