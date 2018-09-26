@@ -95,7 +95,7 @@ namespace SAT.CancelaCFD
 
                 acuse.RfcEmisor = cancelacion.RfcEmisor;
                 acuse.Signature = cancelacion.Signature;
-                acuse.CodEstatus = "205";
+                acuse.CodEstatus = "305";
                 return acuse;
             }
 
@@ -117,7 +117,7 @@ namespace SAT.CancelaCFD
                     {
                     acusesFolios.Add(new AcuseFolios()
                     {
-                        EstatusUUID = "202",
+                        EstatusUUID = "201",
                             UUID = folio.UUID.ToUpper()
                         });
                     }
@@ -127,7 +127,7 @@ namespace SAT.CancelaCFD
 
                 acuse.RfcEmisor = cancelacion.RfcEmisor;
                 acuse.Signature = cancelacion.Signature;
-                acuse.CodEstatus = "201";
+                
                 return acuse;
             }
 
