@@ -135,7 +135,7 @@ namespace SAT.AceptacionRechazo
                 ar.CodEstatus = "1000";
                 return ar;
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 ar.CodEstatus = "305";
                 return ar;
@@ -149,11 +149,14 @@ namespace SAT.AceptacionRechazo
             if(folio.Respuesta == TipoAccionPeticionCancelacion.Aceptacion)
             {
                 _cancelation.CancelDocument(folio.UUID);
+                
             }
             else
             {
                 _cancelation.NormalizeDocument(folio.UUID);
+               
             }
+            _pendings.DeletePending(folio.UUID);
         }
      }
 }
