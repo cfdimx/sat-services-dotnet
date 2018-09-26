@@ -127,7 +127,7 @@ namespace SAT.CancelaCFD
 
                 acuse.RfcEmisor = cancelacion.RfcEmisor;
                 acuse.Signature = cancelacion.Signature;
-                acuse.CodEstatus = "1004";
+                acuse.CodEstatus = "201";
                 return acuse;
             }
 
