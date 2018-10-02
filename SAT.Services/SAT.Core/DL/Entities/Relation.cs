@@ -12,7 +12,7 @@ namespace SAT.Core.DL.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public double Id { get; set; }
+        public Int64 Id { get; set; }
         public Guid UUID { get; set; }
         public Guid ParentUUID { get; set; }
         public string RelationType { get; set; }
