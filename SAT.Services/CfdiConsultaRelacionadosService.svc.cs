@@ -19,15 +19,9 @@ namespace SAT.Services
         public CfdiConsultaRelacionadosService()
         {
             string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
-            RelationsDAO relations;
-            ReceptionDAO reception;
+            
 
-            SAT.Core.DL.Database _sql = new SAT.Core.DL.Database(new SQLDatabase(emulation_db));
-            reception = new ReceptionDAO(_sql);
-
-            relations = new RelationsDAO(_sql);
-
-            _service = new CfdiConsultaRelacionadosServiceEmulation(relations, reception);
+            _service = new CfdiConsultaRelacionadosServiceEmulation(emulation_db);
         }
         public ConsultaRelacionados ProcesarRespuesta(PeticionConsultaRelacionados solicitud)
         {
