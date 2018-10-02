@@ -14,19 +14,17 @@ namespace SAT.Core.DL.Implements.SQL
         private Repository<Document> _db = null;
         private Repository<Relation> _dbRelation = null;
         private Repository<PendingCancelation> _dbPendings = null;
+        private Context _cx = null;
         public SQLDatabase(string connString)
         {
-            var cx = new Context(connString);
-
-            _db = new Repository<Document>(cx);
-            _dbRelation = new Repository<Relation>(cx);
-            _dbPendings = new Repository<PendingCancelation>(cx);
-
-
+            _cx = new Context(connString);
+            _db = new Repository<Document>(_cx);
+            _dbRelation = new Repository<Relation>(_cx);
+            _dbPendings = new Repository<PendingCancelation>(_cx);
         }
         public DocumentBase GetDocument(Guid uuid)
         {
-            
+
             return _db.GetAll(w => w.UUID == uuid).FirstOrDefault();
         }
 
@@ -62,7 +60,7 @@ namespace SAT.Core.DL.Implements.SQL
             _dbRelation.Insert((Relation)document);
         }
 
-     
+
 
         public void UpdateRelation(IEntity document)
         {
@@ -106,6 +104,12 @@ namespace SAT.Core.DL.Implements.SQL
         public IEnumerable<PendingCancelation> GetPendingCancelationsByUUID(Guid uuidB)
         {
             return _dbPendings.GetAll(w => w.UUID == uuidB);
+        }
+
+        public void Close()
+        {
+            _cx.Dispose();
+
         }
     }
 }

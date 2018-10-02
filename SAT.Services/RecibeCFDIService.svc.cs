@@ -22,9 +22,7 @@ namespace SAT.Services
         {
             string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
             string emulation_sas = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(System.Environment.GetEnvironmentVariable("EMULATION_SAS")));
-            RelationsDAO relations = RelationsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            ReceptionDAO reception = ReceptionDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            _service = new RecibeServiceEmulation(relations, reception, emulation_sas);
+            _service = new RecibeServiceEmulation(emulation_db, emulation_sas);
         }
         public AcuseRecepcion Recibe(CFDI cFDI)
         {

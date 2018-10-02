@@ -22,8 +22,12 @@ namespace SAT.Services
         {
             string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
           
-            PendingsDAO pendings = PendingsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            CancelationDAO cancelation = CancelationDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
+           
+            PendingsDAO pendings;
+            CancelationDAO cancelation;
+            SAT.Core.DL.Database _sql = new SAT.Core.DL.Database(new SQLDatabase(emulation_db));
+            pendings = new PendingsDAO(_sql);
+            cancelation = new CancelationDAO(_sql);
             _service = new CancelationAceptacionRechazoServiceEmulation(pendings, cancelation);
         }
         public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud)

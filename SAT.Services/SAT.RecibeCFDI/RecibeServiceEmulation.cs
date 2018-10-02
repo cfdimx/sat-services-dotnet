@@ -15,32 +15,31 @@ namespace SAT.RecibeCFDI
 {
     public class RecibeServiceEmulation : IRecibeServiceEmulation
     {
-        
+
         private string SAS;
-        private RelationsDAO _relations;
-        private ReceptionDAO _reception;
-        public RecibeServiceEmulation(RelationsDAO relations, ReceptionDAO receptions, string SASc )
+        private readonly string _connectionString;
+        public RecibeServiceEmulation(string connectionString, string SASc)
         {
             SAS = SASc;
-            _relations = relations;
-            _reception = receptions;
+            _connectionString = connectionString;
         }
-
 
         public AcuseRecepcion Recibe(CFDI cFDI)
         {
-
             try
             {
                 XmlDocument xml = GetXml(cFDI.RutaCFDI);
                 if (xml == null) throw new XmlException();
                 var root = xml.DocumentElement;
-                var doc = _reception.GetDocumentByUUID(Guid.Parse(cFDI.EncabezadoCFDI.UUID));
-               if (doc== null)
+                using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
                 {
-                    SaveDocument(cFDI, root);
+                    var doc = reception.GetDocumentByUUID(Guid.Parse(cFDI.EncabezadoCFDI.UUID));
+                    if (doc == null)
+                    {
+                        SaveDocument(cFDI, root);
+                    }
                 }
-               
+
                 return new AcuseRecepcion()
                 {
                     AcuseRecepcionCFDI = new Acuse()
@@ -49,20 +48,20 @@ namespace SAT.RecibeCFDI
                         CodEstatus = "Comprobante recibido satisfactoriamente",
                         Fecha = DateTime.Now,
                         NoCertificadoSAT = root["cfdi:Complemento"]["tfd:TimbreFiscalDigital"].GetAttribute("NoCertificadoSAT"),
-                        
-            }
+
+                    }
                 };
             }
-            catch (XmlException)
+            catch (XmlException e)
             {
                 return SendError("502", cFDI);
             }
-            
+
         }
         private AcuseRecepcion SendError(string error, CFDI cFDI)
         {
             List<IncidenciaAcuseRecepcion> incidencias = new List<IncidenciaAcuseRecepcion>();
-            
+
             IncidenciaAcuseRecepcion incidencia = new IncidenciaAcuseRecepcion()
 
             {
@@ -84,7 +83,7 @@ namespace SAT.RecibeCFDI
         }
         private void SaveDocument(CFDI cFDI, XmlElement root)
         {
-           
+
             string rfc_emisor = root["cfdi:Emisor"].GetAttribute("Rfc");
             string rfc_receptor = root["cfdi:Receptor"].GetAttribute("Rfc");
             string total = root.GetAttribute("Total");
@@ -95,7 +94,7 @@ namespace SAT.RecibeCFDI
             string fecha_emision = root.GetAttribute("Fecha");
             string fecha_timbrado = root["cfdi:Complemento"]["tfd:TimbreFiscalDigital"].GetAttribute("FechaTimbrado");
             var relations = root["cfdi:CfdiRelacionados"];
-            if(relations != null)
+            if (relations != null)
             {
                 string RelationsType = relations.GetAttribute("TipoRelacion");
                 string[] RelationsUUIDS = GetRelations(relations.GetElementsByTagName("cfdi:CfdiRelacionado"));
@@ -105,9 +104,10 @@ namespace SAT.RecibeCFDI
                     SaveRelations(RelationsType, uuid, RelationsUUIDS);
                 }
             }
-           
-           
-            _reception.Receive(cFDI.RutaCFDI,
+
+            using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
+            {
+                reception.Receive(cFDI.RutaCFDI,
                 "S - Comprobante obtenido satisfactoriamente",
                 "Cancelable sin Aceptacion",
                 "Vigente",
@@ -121,10 +121,10 @@ namespace SAT.RecibeCFDI
                 noCertificado,
                 fecha_emision,
                 fecha_timbrado);
+            }
         }
 
-        
-       private string GetEsCancelable(XmlElement root)
+        private string GetEsCancelable(XmlElement root)
         {
             string rfc_emisor = root["cfdi:Emisor"].GetAttribute("Rfc");
             string rfc_receptor = root["cfdi:Receptor"].GetAttribute("Rfc");
@@ -135,9 +135,9 @@ namespace SAT.RecibeCFDI
             string version = root.GetAttribute("Version");
             string fecha_emision = root.GetAttribute("Fecha");
             string fecha_timbrado = root["cfdi:Complemento"]["tfd:TimbreFiscalDigital"].GetAttribute("FechaTimbrado");
-            
+
             if (float.Parse(total) <= 5000 &&
-                (tipo_comprobante == "N" || tipo_comprobante == "E" || tipo_comprobante == "T" ) &&
+                (tipo_comprobante == "N" || tipo_comprobante == "E" || tipo_comprobante == "T") &&
                 rfc_receptor == "XAXX010101000")
             {
                 return "Cancelable sin Aceptacion";
@@ -151,21 +151,24 @@ namespace SAT.RecibeCFDI
             return "Cancelable con Aceptacion";
         }
 
-      
 
 
-        private void SaveRelations(string relationType,string parentUUID, string[] uuids)
+
+        private void SaveRelations(string relationType, string parentUUID, string[] uuids)
         {
-            foreach (string uuid in uuids)
+            using(RelationsDAO relations = new RelationsDAO(new Database(new SQLDatabase(_connectionString))))
             {
-                _relations.SaveRelations(Guid.Parse(uuid), Guid.Parse(parentUUID), relationType);
+                foreach (string uuid in uuids)
+                {
+                    relations.SaveRelations(Guid.Parse(uuid), Guid.Parse(parentUUID), relationType);
+                }
             }
         }
 
         private string[] GetRelations(XmlNodeList relations)
         {
             List<string> rels = new List<string>();
-            foreach(XmlElement r in relations)
+            foreach (XmlElement r in relations)
             {
                 rels.Add(r.GetAttribute("UUID"));
             }
@@ -178,16 +181,14 @@ namespace SAT.RecibeCFDI
             try
             {
                 source = source + SAS;
-                string xmlStr;
+                byte[] content;
                 using (var wc = new WebClient())
                 {
-                    
-                    xmlStr = wc.DownloadString(source);
+                    content = wc.DownloadData(source);
                 }
                 var xmlDoc = new XmlDocument();
-                byte[] bytes = Encoding.UTF8.GetBytes(xmlStr);
-                xmlStr = Encoding.UTF8.GetString(bytes);
-                xmlDoc.LoadXml(xmlStr);
+                string xmlContent = Encoding.UTF8.GetString(content);
+                xmlDoc.LoadXml(xmlContent);
 
                 return xmlDoc;
             }

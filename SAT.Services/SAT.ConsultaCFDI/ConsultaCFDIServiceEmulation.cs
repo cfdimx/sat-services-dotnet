@@ -19,19 +19,10 @@ namespace SAT.ConsultaCFDI
 {
     public class ConsultaCFDIServiceEmulation : IConsultaCFDIServiceEmulation
     {
-
-        
-        
-        private ReceptionDAO _reception;
-        private CancelationDAO _cancelation;
-        private PendingsDAO _pendings;
-        private RelationsDAO _relations;
-        public ConsultaCFDIServiceEmulation(ReceptionDAO reception, CancelationDAO cancelation, PendingsDAO pendings, RelationsDAO relations)
+        string _connectionString;
+        public ConsultaCFDIServiceEmulation(string connectionString)
         {
-            _pendings = pendings;
-            _cancelation = cancelation;
-            _reception = reception;
-            _relations = relations;
+            _connectionString = connectionString;
         }
         public Acuse Consulta(string expresionImpresa)
         {
@@ -40,62 +31,64 @@ namespace SAT.ConsultaCFDI
             var dict = HttpUtility.ParseQueryString(expresionImpresa);
             string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
-            
-            Document query = _reception.GetDocumentByUUID(Guid.Parse(respObj.id));
-            if (query == null)
-            {
-                acuse.Estado = "No encontrado";
-                acuse.CodigoEstatus = "N - 602: Comprobante no encontrado.";
-                acuse.EsCancelable = "";
-                acuse.EstatusCancelacion = "";
-                return acuse;
-            }
-            if (_relations.GetRelationsParents(query.UUID).ToArray().Length > 0)
-            {
-                acuse.EsCancelable = "No cancelable";
-                
-            }
-            else
-            {
-                if (_pendings.GetPendingByUUID(query.UUID) == null)
-                {
-                    if ( ( IsCancelledByTime(query) && !IsGenerericRFC(query) && !IsForeignRFC(query) && IsMore5K(query) && !IsEgresosNomina(query) ) || query.EstatusCancelacion == "Solicitud rechazada")
-                    {
-                        acuse.EsCancelable = "Cancelable con aceptacion";
 
+            using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
+            {
+                Document query = reception.GetDocumentByUUID(Guid.Parse(respObj.id));
+                if (query == null)
+                {
+                    acuse.Estado = "No encontrado";
+                    acuse.CodigoEstatus = "N - 602: Comprobante no encontrado.";
+                    acuse.EsCancelable = "";
+                    acuse.EstatusCancelacion = "";
+                    return acuse;
+                }
+                using (RelationsDAO relations = new RelationsDAO(new Database(new SQLDatabase(_connectionString))))
+                {
+
+                    if (relations.GetRelationsParents(query.UUID).ToArray().Length > 0)
+                    {
+                        acuse.EsCancelable = "No cancelable";
 
                     }
-
                     else
                     {
-                        acuse.EsCancelable = "Cancelable sin aceptacion";
+                        using (PendingsDAO pendings = new PendingsDAO(new Database(new SQLDatabase(_connectionString))))
+                        {
 
-
+                            if (pendings.GetPendingByUUID(query.UUID) == null)
+                            {
+                                if ((IsCancelledByTime(query) && !IsGenerericRFC(query) && !IsForeignRFC(query) && IsMore5K(query) && !IsEgresosNomina(query)) || query.EstatusCancelacion == "Solicitud rechazada")
+                                {
+                                    acuse.EsCancelable = "Cancelable con aceptacion";
+                                }
+                                else
+                                {
+                                    acuse.EsCancelable = "Cancelable sin aceptacion";
+                                }
+                            }
+                            else
+                            {
+                                if (IsAutoCancel(query))
+                                {
+                                    using (CancelationDAO cancelation = new CancelationDAO(new Database(new SQLDatabase(_connectionString))))
+                                    {
+                                        cancelation.CancelDocument(query.UUID);
+                                    }
+                                }
+                                acuse.EsCancelable = "Cancelable con aceptacion";
+                            }
+                        }
                     }
+                    var updated = reception.GetDocumentByUUID(Guid.Parse(respObj.id));
+                    acuse.CodigoEstatus = updated.CodigoEstatus;
+                    acuse.Estado = updated.Estado;
+                    acuse.EstatusCancelacion = updated.EstatusCancelacion;
                 }
-
-                else
-                {
-                    if (IsAutoCancel(query))
-                    {
-
-                        _cancelation.CancelDocument(query.UUID);
-                    }
-                    acuse.EsCancelable = "Cancelable con aceptacion";
-                }
+                return acuse;
             }
-            
-            
 
-            
-            var updated = _reception.GetDocumentByUUID(Guid.Parse(respObj.id));
-            acuse.CodigoEstatus = updated.CodigoEstatus;
-            acuse.Estado = updated.Estado;
-            acuse.EstatusCancelacion = updated.EstatusCancelacion;
-            
-            return acuse;
         }
-
 
         private bool IsGenerericRFC(Document cfdi)
         {
@@ -119,19 +112,21 @@ namespace SAT.ConsultaCFDI
         {
             //TODO: esto es para no esperar 10 mins, al subir poner 10
 
-            var minutes = (int)(GetCentralTime() - doc.FechaEmision ).TotalMinutes;
+            var minutes = (int)(GetCentralTime() - doc.FechaEmision).TotalMinutes;
             return minutes > 10;// <---- aqui
         }
 
         private bool IsAutoCancel(Document doc)
         {
             //TODO: esto es para no esperar 15 minutos, al subir poner 15
-            var pending = _pendings.GetPendingByUUID(doc.UUID);
-            if (pending == null) return false;
-            var minutes = (int)(GetCentralTime() - pending.FechaSolicitud).TotalMinutes;
-            return minutes > 15;//<----------- aqui
+            using (PendingsDAO pendings = new PendingsDAO(new Database(new SQLDatabase(_connectionString))))
+            {
+                var pending = pendings.GetPendingByUUID(doc.UUID);
+                if (pending == null) return false;
+                var minutes = (int)(GetCentralTime() - pending.FechaSolicitud).TotalMinutes;
+                return minutes > 15;//<----------- aqui
+            }
         }
-
         private DateTime GetCentralTime()
         {
             TimeZoneInfo setTimeZoneInfo;

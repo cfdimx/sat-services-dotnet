@@ -26,7 +26,6 @@ namespace SAT.Core.DL
         void DeletePendingCancelation(IEntity pending);
         IEnumerable<PendingCancelation> GetPendingCancelations(string rfcReceptor);
         IEnumerable<PendingCancelation> GetPendingCancelationsByUUID(Guid uuidB);
-
-
+        void Close();
     }
 }

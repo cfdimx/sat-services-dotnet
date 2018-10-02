@@ -11,25 +11,6 @@ namespace SAT.Core.DL.DAO.Cancelation
         public CancelationDAO(Database db) :base(db)
         {
         }
-        private static Object _lock = new Object();
-        private static CancelationDAO _instance = null;
-
-        public static CancelationDAO Instance(Database db)
-        {
-            if (_instance == null)
-            {
-                lock (_lock)
-                {
-                    if (_instance == null)
-                    {
-                        _instance = new CancelationDAO(db);
-                    }
-                }
-            }
-
-            return _instance;
-        }
-
         public void StartCancelDocument(Guid uuid)
         {
             var doc = _db.GetDocumentByUUID(uuid);
