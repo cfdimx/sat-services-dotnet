@@ -36,11 +36,10 @@ namespace SAT.RecibeCFDI
                 if (xml == null) throw new XmlException();
                 var root = xml.DocumentElement;
                 var doc = _reception.GetDocumentByUUID(Guid.Parse(cFDI.EncabezadoCFDI.UUID));
-               if (doc== null)
-                {
-                    SaveDocument(cFDI, root);
-                }
-               
+                if (doc != null) return SendError("501", cFDI);
+
+                SaveDocument(cFDI, root);
+
                 return new AcuseRecepcion()
                 {
                     AcuseRecepcionCFDI = new Acuse()
