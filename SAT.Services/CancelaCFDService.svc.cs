@@ -22,12 +22,21 @@ namespace SAT.Services
         SAT.CancelaCFD.ICancelaCFDBindingEmulation _service;
         public CancelaCFDBinding()
         {
+           
+
             string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
-            CancelationDAO cancelation = CancelationDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            PendingsDAO pendings = new PendingsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            RelationsDAO relations = new RelationsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            _service = new CancelaCFDBindingEmulation(cancelation,pendings, reception, relations);
+            
+
+            ReceptionDAO reception;
+            RelationsDAO relations;
+            PendingsDAO pendings;
+            CancelationDAO cancelation;
+            SAT.Core.DL.Database _sql = new SAT.Core.DL.Database(new SQLDatabase(emulation_db));
+            reception = new ReceptionDAO(_sql);
+            pendings = new PendingsDAO(_sql);
+            relations = new RelationsDAO(_sql);
+            cancelation = new CancelationDAO(_sql);
+            _service = new CancelaCFDBindingEmulation(cancelation, pendings, reception, relations);
         }
         public Acuse CancelaCFD(Cancelacion Cancelacion)
         {

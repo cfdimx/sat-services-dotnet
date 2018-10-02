@@ -21,12 +21,20 @@ namespace SAT.Services
         public SAT.ConsultaCFDI.IConsultaCFDIServiceEmulation _service;
         public ConsultaCFDIService()
         {
+            
             string emulation_db = System.Environment.GetEnvironmentVariable("EMULATION_DB");
-            ReceptionDAO reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            CancelationDAO cancelation = new CancelationDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            PendingsDAO pendings = new PendingsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            RelationsDAO relations = new RelationsDAO(new SAT.Core.DL.Database(new SQLDatabase(emulation_db)));
-            _service = new ConsultaCFDIServiceEmulation(reception,cancelation, pendings, relations);
+            ReceptionDAO reception;
+            CancelationDAO cancelation;
+            PendingsDAO pendings;
+            RelationsDAO relations;
+            using (SAT.Core.DL.Database _sql = new SAT.Core.DL.Database(new SQLDatabase(emulation_db)))
+            {
+                reception = new ReceptionDAO(_sql);
+                cancelation = new CancelationDAO(_sql);
+                pendings = new PendingsDAO(_sql);
+                relations = new RelationsDAO(_sql);                
+            }
+            _service = new ConsultaCFDIServiceEmulation(emulation_db);
         }
         public Acuse Consulta(string expresionImpresa)
         {
