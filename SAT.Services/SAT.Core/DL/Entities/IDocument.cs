@@ -8,7 +8,7 @@ namespace SAT.Core.DL.Entities
 {
     public interface IDocument
     {
-        string UUID { get; }
+        Guid UUID { get; }
     }
 
     public interface IEntity

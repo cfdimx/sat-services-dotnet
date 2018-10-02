@@ -10,8 +10,7 @@ namespace SAT.Core.DL.Entities
     public class PendingCancelation: IEntity
     {
         [Key]
-        public long id { get; set; }
-        public string UUID { get; set; }
+        public Guid UUID { get; set; }
         public string RfcReceptor { get; set; }
         public DateTime FechaSolicitud { get; set; }
     }

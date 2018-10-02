@@ -33,7 +33,7 @@ namespace SAT.Core.DL.DAO.Pendings
             return _instance;
         }
 
-        public void SendPending(string uuid)
+        public void SendPending(Guid uuid)
         {
             var doc = _db.GetDocumentByUUID(uuid);
             PendingCancelation pending = new PendingCancelation()
@@ -51,11 +51,11 @@ namespace SAT.Core.DL.DAO.Pendings
             return _db.GetPendingCancelations(rfc);
         }
 
-        public PendingCancelation GetPendingByUUID(string uuid)
+        public PendingCancelation GetPendingByUUID(Guid uuid)
         {
             return _db.GetPendingCancelationsByUUID(uuid).FirstOrDefault();
         }
-        public void DeletePending(string uuid)
+        public void DeletePending(Guid uuid)
         {
             _db.DeletePending(uuid);
         }

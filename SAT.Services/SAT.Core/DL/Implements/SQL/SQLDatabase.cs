@@ -24,12 +24,13 @@ namespace SAT.Core.DL.Implements.SQL
 
 
         }
-        public DocumentBase GetDocument(string uuid)
+        public DocumentBase GetDocument(Guid uuid)
         {
+            
             return _db.GetAll(w => w.UUID == uuid).FirstOrDefault();
         }
 
-        public DocumentBase GetDocumentbyParams(string uuid, string total, string rfcReceptor, string rfcEmisor)
+        public DocumentBase GetDocumentbyParams(Guid uuid, string total, string rfcReceptor, string rfcEmisor)
         {
             var data = _db.GetAll(w => w.UUID == uuid && w.Total == total && w.RfcReceptor == rfcReceptor && w.RfcEmisor == rfcEmisor);
             return _db.GetAll(w => w.UUID == uuid && w.Total == total && w.RfcReceptor == rfcReceptor && w.RfcEmisor == rfcEmisor).FirstOrDefault();
@@ -73,11 +74,11 @@ namespace SAT.Core.DL.Implements.SQL
             _dbRelation.Delete((Relation)document);
         }
 
-        public IEnumerable<Relation> GetRelationsParents(string uuid)
+        public IEnumerable<Relation> GetRelationsParents(Guid uuid)
         {
             return _dbRelation.GetAll(w => w.UUID == uuid);
         }
-        public IEnumerable<Relation> GetRelationsChildren(string uuid)
+        public IEnumerable<Relation> GetRelationsChildren(Guid uuid)
         {
             return _dbRelation.GetAll(w => w.ParentUUID == uuid);
         }
@@ -102,7 +103,7 @@ namespace SAT.Core.DL.Implements.SQL
             return _dbPendings.GetAll(w => w.RfcReceptor == rfcReceptor);
         }
 
-        public IEnumerable<PendingCancelation> GetPendingCancelationsByUUID(string uuidB)
+        public IEnumerable<PendingCancelation> GetPendingCancelationsByUUID(Guid uuidB)
         {
             return _dbPendings.GetAll(w => w.UUID == uuidB);
         }

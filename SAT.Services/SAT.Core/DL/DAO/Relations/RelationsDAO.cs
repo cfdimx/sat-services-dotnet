@@ -33,7 +33,7 @@ namespace SAT.Core.DL.DAO.Relations
             return _instance;
         }
 
-        public bool SaveRelations(string uuid, string parentUUID, string relationType)
+        public bool SaveRelations(Guid uuid, Guid parentUUID, string relationType)
         {
             try
             {
@@ -53,7 +53,7 @@ namespace SAT.Core.DL.DAO.Relations
             }
         }
 
-        public IEnumerable<Relation> GetRelationsParents(string uuid)
+        public IEnumerable<Relation> GetRelationsParents(Guid uuid)
         {
             try
             {
@@ -65,7 +65,7 @@ namespace SAT.Core.DL.DAO.Relations
             }
         }
 
-        public IEnumerable<Relation> GetRelationsChildren(string uuid)
+        public IEnumerable<Relation> GetRelationsChildren(Guid uuid)
         {
             try
             {
@@ -76,7 +76,7 @@ namespace SAT.Core.DL.DAO.Relations
                 return null;
             }
         }
-        public void DeleteParentRelations(string uuid)
+        public void DeleteParentRelations(Guid uuid)
         {
             var relations = _db.GetRelationsChildren(uuid);
             

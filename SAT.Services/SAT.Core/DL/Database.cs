@@ -18,11 +18,11 @@ namespace SAT.Core.DL
         }
 
         
-        public DocumentBase GetDocumentByUUID(string uuid)
+        public DocumentBase GetDocumentByUUID(Guid uuid)
         {
             return _db.GetDocument(uuid);
         }
-        public DocumentBase GetDocument(string uuid, string total, string rfcReceptor, string rfcEmisor)
+        public DocumentBase GetDocument(Guid uuid, string total, string rfcReceptor, string rfcEmisor)
         {
             return _db.GetDocumentbyParams(uuid, total,rfcReceptor, rfcEmisor);
         }
@@ -55,12 +55,12 @@ namespace SAT.Core.DL
         {
             _db.DeleteRelation(relation);
         }
-        public IEnumerable<Relation> GetRelationsParents(string uuid)
+        public IEnumerable<Relation> GetRelationsParents(Guid uuid)
         {
             return _db.GetRelationsParents(uuid);
         }
 
-        public IEnumerable<Relation> GetRelationsChildren(string uuid)
+        public IEnumerable<Relation> GetRelationsChildren(Guid uuid)
         {
             return _db.GetRelationsChildren(uuid);
         }
@@ -73,7 +73,7 @@ namespace SAT.Core.DL
             _db.SavePendingCancelation(pendingCancelation);
         }
 
-        public void DeletePending(string uuid)
+        public void DeletePending(Guid uuid)
         {
             var pend = _db.GetPendingCancelationsByUUID(uuid).FirstOrDefault() ;
             _db.DeletePendingCancelation(pend);
@@ -84,7 +84,7 @@ namespace SAT.Core.DL
             return _db.GetPendingCancelations(rfcReceptor);
         }
 
-        public IEnumerable<PendingCancelation> GetPendingCancelationsByUUID(string uuid)
+        public IEnumerable<PendingCancelation> GetPendingCancelationsByUUID(Guid uuid)
         {
             return _db.GetPendingCancelationsByUUID(uuid);
         }

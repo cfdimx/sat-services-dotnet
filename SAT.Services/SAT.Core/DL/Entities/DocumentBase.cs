@@ -10,13 +10,13 @@ namespace SAT.Core.DL.Entities
     public class DocumentBase : IDocument, IEntity
     {
         [Key]
-        public long id { get; set; }
+        public Guid UUID { get; set; }
         public string XmlUrl { get; set; }
         public string CodigoEstatus { get; set; }
         public string EsCancelable { get; set; }
         public string Estado { get; set; }
         public string EstatusCancelacion { get; set; }
-        public string UUID { get; set; }
+        
         public string TipoComprobante { get; set; }
         public string Total { get; set; }
         public string RfcReceptor { get; set; }

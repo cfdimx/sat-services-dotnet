@@ -10,9 +10,9 @@ namespace SAT.Core.DL.Entities
     public class Relation: IEntity
     {
         [Key]
-        public long id { get; set; }
-        public string UUID { get; set; }
-        public string ParentUUID { get; set; }
+        public double id { get; set; }
+        public Guid UUID { get; set; }
+        public Guid ParentUUID { get; set; }
         public string RelationType { get; set; }
     }
 }

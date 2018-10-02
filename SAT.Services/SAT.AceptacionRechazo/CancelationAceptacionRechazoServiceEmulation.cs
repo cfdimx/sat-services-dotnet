@@ -42,7 +42,7 @@ namespace SAT.AceptacionRechazo
             }
             foreach (var p in pendings)
             {
-                uuids.Add(p.UUID);
+                uuids.Add(p.UUID.ToString());
             }
             
            
@@ -148,15 +148,15 @@ namespace SAT.AceptacionRechazo
         {
             if(folio.Respuesta == TipoAccionPeticionCancelacion.Aceptacion)
             {
-                _cancelation.CancelDocument(folio.UUID);
+                _cancelation.CancelDocument(Guid.Parse(folio.UUID));
                 
             }
             else
             {
-                _cancelation.NormalizeDocument(folio.UUID);
+                _cancelation.NormalizeDocument(Guid.Parse(folio.UUID));
                
             }
-            _pendings.DeletePending(folio.UUID);
+            _pendings.DeletePending(Guid.Parse(folio.UUID));
         }
      }
 }
