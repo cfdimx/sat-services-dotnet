@@ -67,13 +67,13 @@ namespace SAT.CancelaCFD
             DateTime cancelationDate = DateTime.Parse(string.Format("{0:s}", DateTime.UtcNow), CultureInfo.InvariantCulture);
            
             acuse.Fecha = cancelationDate;
-            if (cancelacion.Folios.Any(w => _reception.GetDocumentByUUID(w.UUID) == null))
+            if (cancelacion.Folios.Any(w => _reception.GetDocumentByUUID(Guid.Parse(w.UUID)) == null))
             {
                 acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
                 var acusesFolios = new List<AcuseFolios>();
                 foreach (var folio in cancelacion.Folios)
                 {
-                    if (_reception.GetDocumentByUUID(folio.UUID) == null)
+                    if (_reception.GetDocumentByUUID(Guid.Parse(folio.UUID)) == null)
                     {
                         acusesFolios.Add(new AcuseFolios()
                         {
@@ -99,13 +99,13 @@ namespace SAT.CancelaCFD
                 return acuse;
             }
 
-            if (cancelacion.Folios.Any(w => _pendings.GetPendingByUUID(w.UUID)!= null))
+            if (cancelacion.Folios.Any(w => _pendings.GetPendingByUUID(Guid.Parse(w.UUID))!= null))
             {
                 acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
                 var acusesFolios = new List<AcuseFolios>();
                 foreach (var folio in cancelacion.Folios)
                 {
-                    if (_pendings.GetPendingByUUID(folio.UUID) != null)
+                    if (_pendings.GetPendingByUUID(Guid.Parse(folio.UUID)) != null)
                     {
                         acusesFolios.Add(new AcuseFolios()
                         {
@@ -131,13 +131,13 @@ namespace SAT.CancelaCFD
                 return acuse;
             }
 
-            if (cancelacion.Folios.Any(w => _relations.GetRelationsParents(w.UUID)?.Count() > 0))
+            if (cancelacion.Folios.Any(w => _relations.GetRelationsParents(Guid.Parse(w.UUID))?.Count() > 0))
             {
                 acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
                 var acusesFolios = new List<AcuseFolios>();
                 foreach (var folio in cancelacion.Folios)
                 {
-                    if (_relations.GetRelationsParents(folio.UUID).Count() > 0)
+                    if (_relations.GetRelationsParents(Guid.Parse(folio.UUID)).Count() > 0)
                     {
                         acusesFolios.Add(new AcuseFolios()
                         {
@@ -187,20 +187,20 @@ namespace SAT.CancelaCFD
         {
             foreach (var f in folios)
             {
-                var doc = _reception.GetDocumentByUUID(f.UUID);
-                if ( ( IsCancelledByTime(f.UUID) && !IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) && !IsEgresosNomina(doc) ) || doc.EstatusCancelacion == "Solicitud rechazada")
+                var doc = _reception.GetDocumentByUUID(Guid.Parse(f.UUID));
+                if ( ( IsCancelledByTime(Guid.Parse(f.UUID)) && !IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) && !IsEgresosNomina(doc) ) || doc.EstatusCancelacion == "Solicitud rechazada")
                 {
-                    if (_pendings.GetPendingByUUID(f.UUID) == null)
+                    if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID)) == null)
                     {
-                        _cancelation.StartCancelDocument(f.UUID);
-                        _pendings.SendPending(f.UUID);
+                        _cancelation.StartCancelDocument(Guid.Parse(f.UUID));
+                        _pendings.SendPending(Guid.Parse(f.UUID));
                     }
                    
                 }
                 else
                 {
                     
-                    _cancelation.CancelDocument(f.UUID);
+                    _cancelation.CancelDocument(Guid.Parse(f.UUID));
                 }
 
 
@@ -227,7 +227,7 @@ namespace SAT.CancelaCFD
             return document.TipoComprobante == "E" || document.TipoComprobante == "N";
         }
 
-        private bool IsCancelledByTime(string uuid)
+        private bool IsCancelledByTime(Guid uuid)
         {
             var doc = _reception.GetDocumentByUUID(uuid);
             var minutes = (int)(GetCentralTime() - doc.FechaEmision).TotalMinutes;

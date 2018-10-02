@@ -41,7 +41,7 @@ namespace SAT.ConsultaCFDI
             string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
             
-            Document query = _reception.GetDocumentByUUID(respObj.id);
+            Document query = _reception.GetDocumentByUUID(Guid.Parse(respObj.id));
             if (query == null)
             {
                 acuse.Estado = "No encontrado";
@@ -88,7 +88,7 @@ namespace SAT.ConsultaCFDI
             
 
             
-            var updated = _reception.GetDocumentByUUID(respObj.id);
+            var updated = _reception.GetDocumentByUUID(Guid.Parse(respObj.id));
             acuse.CodigoEstatus = updated.CodigoEstatus;
             acuse.Estado = updated.Estado;
             acuse.EstatusCancelacion = updated.EstatusCancelacion;

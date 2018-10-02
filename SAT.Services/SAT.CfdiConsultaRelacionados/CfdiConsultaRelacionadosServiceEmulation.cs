@@ -78,21 +78,21 @@ namespace SAT.CfdiConsultaRelacionados
 
             List<UuidRelacionado> childrens = new List<UuidRelacionado>();
             List<UuidPadre> parents = new List<UuidPadre>();
-            foreach (var child in _relations.GetRelationsChildren(solicitud.Uuid))
+            foreach (var child in _relations.GetRelationsChildren(Guid.Parse(solicitud.Uuid)))
             {
                 var doc = _receptions.GetDocumentByUUID(child.UUID);
                 var rfcEmisor = doc.RfcEmisor;
                 var rfcReceptor = doc.RfcReceptor;
                 var uid = doc.UUID;
-                childrens.Add(new UuidRelacionado() { RfcEmisor = rfcEmisor, RfcReceptor = rfcReceptor, Uuid = uid });
+                childrens.Add(new UuidRelacionado() { RfcEmisor = rfcEmisor, RfcReceptor = rfcReceptor, Uuid = uid.ToString() });
             }
-            foreach (var parent in _relations.GetRelationsParents(solicitud.Uuid))
+            foreach (var parent in _relations.GetRelationsParents(Guid.Parse(solicitud.Uuid)))
             {
                 var doc = _receptions.GetDocumentByUUID(parent.UUID);
                 var rfcEmisor = doc.RfcEmisor;
                 var rfcReceptor = doc.RfcReceptor;
                 var uid = parent.ParentUUID;
-                parents.Add(new UuidPadre() { RfcEmisor = rfcEmisor, RfcReceptor = rfcReceptor, Uuid = uid });
+                parents.Add(new UuidPadre() { RfcEmisor = rfcEmisor, RfcReceptor = rfcReceptor, Uuid = uid.ToString() });
             }
             if(childrens.ToArray().Length == 0 && parents.ToArray().Length == 0)
             {

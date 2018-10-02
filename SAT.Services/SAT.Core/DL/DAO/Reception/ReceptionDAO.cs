@@ -34,12 +34,12 @@ namespace SAT.Core.DL.DAO.Reception
             return _instance;
         }
 
-        public Document GetDocumentByUUID(string uuid)
+        public Document GetDocumentByUUID(Guid uuid)
         {
             return (Document)_db.GetDocumentByUUID(uuid);
         }
 
-        public Document ConsultaCFDI(string total, string uuid, string rfcReceptor, string rfcEmisor)
+        public Document ConsultaCFDI(string total, Guid uuid, string rfcReceptor, string rfcEmisor)
         {
             return (Document)_db.GetDocument(uuid,total, rfcReceptor, rfcEmisor);
         }
@@ -54,7 +54,7 @@ namespace SAT.Core.DL.DAO.Reception
             string esCancelable,
             string estado,
             string estatusCancelacion,
-            string uuid,
+            Guid uuid,
             string tipoComprobante,
             string total,
             string rfcReceptor,

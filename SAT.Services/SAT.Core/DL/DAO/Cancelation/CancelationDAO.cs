@@ -30,14 +30,14 @@ namespace SAT.Core.DL.DAO.Cancelation
             return _instance;
         }
 
-        public void StartCancelDocument(string uuid)
+        public void StartCancelDocument(Guid uuid)
         {
             var doc = _db.GetDocumentByUUID(uuid);
             doc.EstatusCancelacion = "En proceso";
             _db.Update(doc);
         }
 
-        public void CancelDocument(string uuid)
+        public void CancelDocument(Guid uuid)
         {
             var doc = _db.GetDocumentByUUID(uuid);
             doc.EstatusCancelacion = null;
@@ -54,7 +54,7 @@ namespace SAT.Core.DL.DAO.Cancelation
             }
         }
 
-        public void NormalizeDocument(string uuid)
+        public void NormalizeDocument(Guid uuid)
         {
             var doc = _db.GetDocumentByUUID(uuid);
             doc.EstatusCancelacion = "Solicitud rechazada";

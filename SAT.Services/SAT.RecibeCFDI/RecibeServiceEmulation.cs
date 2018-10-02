@@ -35,7 +35,7 @@ namespace SAT.RecibeCFDI
                 XmlDocument xml = GetXml(cFDI.RutaCFDI);
                 if (xml == null) throw new XmlException();
                 var root = xml.DocumentElement;
-                var doc = _reception.GetDocumentByUUID(cFDI.EncabezadoCFDI.UUID);
+                var doc = _reception.GetDocumentByUUID(Guid.Parse(cFDI.EncabezadoCFDI.UUID));
                if (doc== null)
                 {
                     SaveDocument(cFDI, root);
@@ -112,7 +112,7 @@ namespace SAT.RecibeCFDI
                 "Cancelable sin Aceptacion",
                 "Vigente",
                 null,
-                uuid,
+                Guid.Parse(uuid),
                 tipo_comprobante,
                 total,
                 rfc_receptor,
@@ -158,7 +158,7 @@ namespace SAT.RecibeCFDI
         {
             foreach (string uuid in uuids)
             {
-                _relations.SaveRelations(uuid, parentUUID, relationType);
+                _relations.SaveRelations(Guid.Parse(uuid), Guid.Parse(parentUUID), relationType);
             }
         }
 
@@ -181,10 +181,11 @@ namespace SAT.RecibeCFDI
                 string xmlStr;
                 using (var wc = new WebClient())
                 {
+                    
                     xmlStr = wc.DownloadString(source);
                 }
                 var xmlDoc = new XmlDocument();
-                byte[] bytes = Encoding.Default.GetBytes(xmlStr);
+                byte[] bytes = Encoding.UTF8.GetBytes(xmlStr);
                 xmlStr = Encoding.UTF8.GetString(bytes);
                 xmlDoc.LoadXml(xmlStr);
 
