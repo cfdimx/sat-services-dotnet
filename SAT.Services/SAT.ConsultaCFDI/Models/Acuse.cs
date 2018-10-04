@@ -10,16 +10,16 @@ namespace SAT.ConsultaCFDI
     public partial class Acuse
     {
 
-        [DataMember]
+        
         private string CodigoEstatusField;
 
-        [DataMember]
+      
         private string EsCancelableField;
 
-        [DataMember]
+        
         private string EstadoField;
 
-        [DataMember]
+        
         private string EstatusCancelacionField;
 
         [DataMember]
