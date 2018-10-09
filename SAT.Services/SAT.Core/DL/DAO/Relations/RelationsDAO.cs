@@ -57,7 +57,17 @@ namespace SAT.Core.DL.DAO.Relations
         {
             try
             {
-                return _db.GetRelationsParents(uuid);
+                List<Relation> rels = new List<Relation>();
+
+
+                foreach (var rel in _db.GetRelationsParents(uuid))
+                {
+                    if(_db.GetDocumentByUUID(rel.ParentUUID).Estado == "Vigente")
+                    {
+                        rels.Add(rel);
+                    }
+                }
+                return rels;
             }
             catch (Exception)
             {

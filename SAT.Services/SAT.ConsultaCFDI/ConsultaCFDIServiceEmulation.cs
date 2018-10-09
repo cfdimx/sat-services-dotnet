@@ -34,7 +34,8 @@ namespace SAT.ConsultaCFDI
 
             using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
             {
-                Document query = reception.GetDocumentByUUID(Guid.Parse(respObj.id));
+                Document query = reception.ConsultaCFDI(respObj.tt, Guid.Parse(respObj.id), respObj.rr, respObj.re);
+                
                 if (query == null)
                 {
                     acuse.Estado = "No encontrado";
@@ -74,6 +75,7 @@ namespace SAT.ConsultaCFDI
                                     using (CancelationDAO cancelation = new CancelationDAO(new Database(new SQLDatabase(_connectionString))))
                                     {
                                         cancelation.CancelDocument(query.UUID);
+                                        pendings.DeletePending(query.UUID);
                                     }
                                 }
                                 acuse.EsCancelable = "Cancelable con aceptacion";
@@ -124,7 +126,7 @@ namespace SAT.ConsultaCFDI
                 var pending = pendings.GetPendingByUUID(doc.UUID);
                 if (pending == null) return false;
                 var minutes = (int)(GetCentralTime() - pending.FechaSolicitud).TotalMinutes;
-                return minutes > 15;//<----------- aqui
+                return minutes > 15;
             }
         }
         private DateTime GetCentralTime()

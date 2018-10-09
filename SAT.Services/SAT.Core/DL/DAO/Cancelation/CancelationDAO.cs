@@ -33,6 +33,7 @@ namespace SAT.Core.DL.DAO.Cancelation
                     _db.DeleteRelations(r);
                 }
             }
+            _db.Save();
         }
 
         public void NormalizeDocument(Guid uuid)
