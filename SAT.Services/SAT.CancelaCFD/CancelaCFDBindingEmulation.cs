@@ -182,6 +182,7 @@ namespace SAT.CancelaCFD
             CancelFolios(cancelacion.Folios);
             return acuse;
         }
+      
 
         private void CancelFolios(CancelacionFolios[] folios)
         {
