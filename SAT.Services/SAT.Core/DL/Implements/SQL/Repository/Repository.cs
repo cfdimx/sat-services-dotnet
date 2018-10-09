@@ -33,7 +33,7 @@ namespace SAT.Core.DL.Implements.SQL.Repository
         public void Delete(T entity)
         {
             DataTable.Remove(entity);
-            _dataContext.SaveChanges();
+            //_dataContext.SaveChanges();
         }
 
      
