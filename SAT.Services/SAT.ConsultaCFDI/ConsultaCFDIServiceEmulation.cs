@@ -125,7 +125,7 @@ namespace SAT.ConsultaCFDI
             {
                 var pending = pendings.GetPendingByUUID(doc.UUID);
                 if (pending == null) return false;
-                var minutes = (int)(GetCentralTime() - pending.FechaSolicitud).TotalMinutes;
+                var minutes = (int)(GetCentralTime() - ConvertToMexicanDate(pending.FechaSolicitud)).TotalMinutes;
                 return minutes > 15;
             }
         }
@@ -134,6 +134,13 @@ namespace SAT.ConsultaCFDI
             TimeZoneInfo setTimeZoneInfo;
             setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
             return TimeZoneInfo.ConvertTime(DateTime.Now, setTimeZoneInfo);
+        }
+        private DateTime ConvertToMexicanDate(DateTime da)
+        {
+            da = da.ToUniversalTime();
+            TimeZoneInfo setTimeZoneInfo;
+            setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            return TimeZoneInfo.ConvertTime(da, setTimeZoneInfo);
         }
     }
 }

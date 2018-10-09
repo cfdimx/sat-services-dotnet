@@ -14,6 +14,14 @@ namespace SAT.Core.DL.DAO.Pendings
 
         }
 
+        private DateTime ConvertToMexicanDate(DateTime da)
+        {
+            da = da.ToUniversalTime();
+            TimeZoneInfo setTimeZoneInfo;
+            setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            return TimeZoneInfo.ConvertTime(da, setTimeZoneInfo);
+        }
+
         private static Object _lock = new Object();
         private static PendingsDAO _instance = null;
 
@@ -40,7 +48,7 @@ namespace SAT.Core.DL.DAO.Pendings
             {
                 UUID = doc.UUID,
                 RfcReceptor = doc.RfcReceptor,
-                FechaSolicitud = DateTime.Now
+                FechaSolicitud = ConvertToMexicanDate(DateTime.Now)
             };
 
             _db.SavePending(pending);
