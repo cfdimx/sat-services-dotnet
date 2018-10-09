@@ -66,6 +66,7 @@ namespace SAT.Core.DL.DAO.Pendings
         public void DeletePending(Guid uuid)
         {
             _db.DeletePending(uuid);
+            _db.Save();
         }
 
         public bool HasPendings(string rfc)
