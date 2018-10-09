@@ -93,6 +93,7 @@ namespace SAT.Core.DL.DAO.Relations
             foreach (var r in relations)
             {
                 _db.DeleteRelations(r);
+                _db.Save();
             }
         }
     }
