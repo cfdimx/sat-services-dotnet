@@ -46,6 +46,7 @@ namespace SAT.Core.DL.DAO.Reception
         public void UpdateDocument(Document doc)
         {
             _db.Update(doc);
+            _db.Save();
         }
 
 
