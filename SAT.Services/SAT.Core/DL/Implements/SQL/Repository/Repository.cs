@@ -46,7 +46,7 @@ namespace SAT.Core.DL.Implements.SQL.Repository
         public void Update(T entity)
         {
             _dataContext.Entry(entity).State = System.Data.Entity.EntityState.Modified;
-            _dataContext.SaveChanges();
+            
         }
 
         

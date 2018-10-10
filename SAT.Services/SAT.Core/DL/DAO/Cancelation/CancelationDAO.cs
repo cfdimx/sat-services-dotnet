@@ -16,6 +16,7 @@ namespace SAT.Core.DL.DAO.Cancelation
             var doc = _db.GetDocumentByUUID(uuid);
             doc.EstatusCancelacion = "En proceso";
             _db.Update(doc);
+            _db.Save();
         }
 
         public void CancelDocument(Guid uuid)
@@ -25,6 +26,7 @@ namespace SAT.Core.DL.DAO.Cancelation
             doc.Estado = "Cancelado";
 
             _db.Update(doc);
+            _db.Save();
             var relations = _db.GetRelationsChildren(uuid);
             if (relations != null)
             {
@@ -43,6 +45,7 @@ namespace SAT.Core.DL.DAO.Cancelation
             doc.Estado = "Vigente";
             doc.EsCancelable = "Cancelable con aceptación";
             _db.Update(doc);
+            _db.Save();
         }
     }
 }
