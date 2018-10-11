@@ -27,6 +27,7 @@ namespace SAT.ConsultaCFDI
         public Acuse Consulta(string expresionImpresa)
         {
             expresionImpresa = Regex.Replace(expresionImpresa, @"\t|\n|\r", "");
+            expresionImpresa =  expresionImpresa.Replace("?","").Trim();
             Acuse acuse = new Acuse();
             var dict = HttpUtility.ParseQueryString(expresionImpresa);
             string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
@@ -131,9 +132,8 @@ namespace SAT.ConsultaCFDI
         }
         private DateTime GetCentralTime()
         {
-            TimeZoneInfo setTimeZoneInfo;
-            setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
-            return TimeZoneInfo.ConvertTime(DateTime.Now, setTimeZoneInfo);
+            var centralTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now.ToUniversalTime(), centralTimeZone);
         }
         private DateTime ConvertToMexicanDate(DateTime da)
         {
