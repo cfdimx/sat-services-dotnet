@@ -67,6 +67,7 @@ namespace SAT.CancelaCFD
             DateTime cancelationDate = DateTime.Parse(string.Format("{0:s}", DateTime.UtcNow), CultureInfo.InvariantCulture);
            
             acuse.Fecha = cancelationDate;
+            
             if (cancelacion.Folios.Any(w => _reception.GetDocumentByUUID(Guid.Parse(w.UUID)) == null))
             {
                 acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
@@ -168,11 +169,24 @@ namespace SAT.CancelaCFD
                 var acusesFolios = new List<AcuseFolios>();
                 foreach (var folio in cancelacion.Folios)
                 {
-                    acusesFolios.Add(new AcuseFolios()
+                    var doc = _reception.GetDocumentByUUID(Guid.Parse(folio.UUID));
+                    if(doc.Estado == "Cancelado")
                     {
-                        EstatusUUID = "201",
-                        UUID = folio.UUID.ToUpper()
-                    });
+                        acusesFolios.Add(new AcuseFolios()
+                        {
+                            EstatusUUID = "202",
+                            UUID = folio.UUID.ToUpper()
+                        });
+                    }
+                    else
+                    {
+                        acusesFolios.Add(new AcuseFolios()
+                        {
+                            EstatusUUID = "201",
+                            UUID = folio.UUID.ToUpper()
+                        });
+                    }
+                    
                 }
                 acuse.Folios = acusesFolios.ToArray();
             }
@@ -189,24 +203,26 @@ namespace SAT.CancelaCFD
             foreach (var f in folios)
             {
                 var doc = _reception.GetDocumentByUUID(Guid.Parse(f.UUID));
-                if ( ( IsCancelledByTime(Guid.Parse(f.UUID)) && !IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) && !IsEgresosNomina(doc) ) || doc.EstatusCancelacion == "Solicitud rechazada")
+                if (doc.Estado != "Cancelado")
                 {
-                    if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID)) == null)
+                    if ((IsCancelledByTime(Guid.Parse(f.UUID)) && !IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) && !IsEgresosNomina(doc)) || doc.EstatusCancelacion == "Solicitud rechazada")
                     {
-                        _cancelation.StartCancelDocument(Guid.Parse(f.UUID));
-                        _pendings.SendPending(Guid.Parse(f.UUID));
+                        if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID)) == null)
+                        {
+                            _cancelation.StartCancelDocument(Guid.Parse(f.UUID));
+                            _pendings.SendPending(Guid.Parse(f.UUID));
+                        }
+
                     }
-                   
+                    else
+                    {
+
+                        _cancelation.CancelDocument(Guid.Parse(f.UUID));
+                    }
+
                 }
-                else
-                {
-                    
-                    _cancelation.CancelDocument(Guid.Parse(f.UUID));
-                }
-
-
-
-            }
+                
+               }
         }
 
         private bool IsGenerericRFC(Document cfdi)
