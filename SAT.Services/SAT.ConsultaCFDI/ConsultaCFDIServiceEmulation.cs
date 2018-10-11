@@ -126,7 +126,7 @@ namespace SAT.ConsultaCFDI
             {
                 var pending = pendings.GetPendingByUUID(doc.UUID);
                 if (pending == null) return false;
-                var minutes = (int)(GetCentralTime() - ConvertToMexicanDate(pending.FechaSolicitud)).TotalMinutes;
+                var minutes = (int)(GetCentralTime() - pending.FechaSolicitud).TotalMinutes;
                 return minutes > 15;
             }
         }
