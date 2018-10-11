@@ -24,6 +24,15 @@ namespace SAT.ConsultaCFDI
         {
             _connectionString = connectionString;
         }
+        private string addDecimals(string s)
+        {
+            string res = s;
+            if (s.Split('.').Length == 1)
+            {
+                res = res + ".00";
+            }
+            return res;
+        }
         public Acuse Consulta(string expresionImpresa)
         {
             expresionImpresa = Regex.Replace(expresionImpresa, @"\t|\n|\r", "");
@@ -32,7 +41,8 @@ namespace SAT.ConsultaCFDI
             var dict = HttpUtility.ParseQueryString(expresionImpresa);
             string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
-            respObj.tt = decimal.Parse(respObj.tt).ToString();
+            var ga = addDecimals(respObj.tt);
+            respObj.tt = ga;
             using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
             {
                 Document query = reception.ConsultaCFDI(respObj.tt, Guid.Parse(respObj.id), respObj.rr, respObj.re);
