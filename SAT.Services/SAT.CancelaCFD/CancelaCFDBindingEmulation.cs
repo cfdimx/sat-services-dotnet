@@ -238,9 +238,8 @@ namespace SAT.CancelaCFD
 
         private DateTime GetCentralTime()
         {
-            TimeZoneInfo setTimeZoneInfo;
-            setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
-            return TimeZoneInfo.ConvertTime(DateTime.Now, setTimeZoneInfo);
+            var centralTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now.ToUniversalTime(), centralTimeZone);
         }
 
 

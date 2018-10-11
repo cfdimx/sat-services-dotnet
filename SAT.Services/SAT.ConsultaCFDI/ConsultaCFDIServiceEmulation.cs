@@ -27,11 +27,12 @@ namespace SAT.ConsultaCFDI
         public Acuse Consulta(string expresionImpresa)
         {
             expresionImpresa = Regex.Replace(expresionImpresa, @"\t|\n|\r", "");
+            expresionImpresa =  expresionImpresa.Replace("?","").Trim();
             Acuse acuse = new Acuse();
             var dict = HttpUtility.ParseQueryString(expresionImpresa);
             string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
-
+            respObj.tt = decimal.Parse(respObj.tt).ToString();
             using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
             {
                 Document query = reception.ConsultaCFDI(respObj.tt, Guid.Parse(respObj.id), respObj.rr, respObj.re);
@@ -125,22 +126,15 @@ namespace SAT.ConsultaCFDI
             {
                 var pending = pendings.GetPendingByUUID(doc.UUID);
                 if (pending == null) return false;
-                var minutes = (int)(GetCentralTime() - ConvertToMexicanDate(pending.FechaSolicitud)).TotalMinutes;
+                var minutes = (int)(GetCentralTime() - pending.FechaSolicitud).TotalMinutes;
                 return minutes > 15;
             }
         }
         private DateTime GetCentralTime()
         {
-            TimeZoneInfo setTimeZoneInfo;
-            setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
-            return TimeZoneInfo.ConvertTime(DateTime.Now, setTimeZoneInfo);
+            var centralTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
+            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now.ToUniversalTime(), centralTimeZone);
         }
-        private DateTime ConvertToMexicanDate(DateTime da)
-        {
-            da = da.ToUniversalTime();
-            TimeZoneInfo setTimeZoneInfo;
-            setTimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
-            return TimeZoneInfo.ConvertTime(da, setTimeZoneInfo);
-        }
+      
     }
 }
