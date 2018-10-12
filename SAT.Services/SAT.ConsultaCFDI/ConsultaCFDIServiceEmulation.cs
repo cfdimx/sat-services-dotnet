@@ -19,7 +19,7 @@ namespace SAT.ConsultaCFDI
 {
     public class ConsultaCFDIServiceEmulation : IConsultaCFDIServiceEmulation
     {
-        string _connectionString;
+        static string _connectionString;
         public ConsultaCFDIServiceEmulation(string connectionString)
         {
             _connectionString = connectionString;
@@ -31,22 +31,18 @@ namespace SAT.ConsultaCFDI
             {
                 res = res + ".00";
             }
+           
             return res;
         }
-        public Acuse Consulta(string expresionImpresa)
+
+        public static Acuse GetLastUpdatedDocument(string rfcEmisor, string rfcReceptor, string total, string uuid)
         {
-            expresionImpresa = Regex.Replace(expresionImpresa, @"\t|\n|\r", "");
-            expresionImpresa =  expresionImpresa.Replace("?","").Trim();
-            Acuse acuse = new Acuse();
-            var dict = HttpUtility.ParseQueryString(expresionImpresa);
-            string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
-            ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
-            var ga = addDecimals(respObj.tt);
-            respObj.tt = ga;
+
             using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
             {
-                Document query = reception.ConsultaCFDI(respObj.tt, Guid.Parse(respObj.id), respObj.rr, respObj.re);
-                
+                Acuse acuse = new Acuse();
+                Document query = reception.ConsultaCFDI(total, Guid.Parse(uuid), rfcReceptor, rfcEmisor);
+
                 if (query == null)
                 {
                     acuse.Estado = "No encontrado";
@@ -60,7 +56,9 @@ namespace SAT.ConsultaCFDI
 
                     if (relations.GetRelationsParents(query.UUID).ToArray().Length > 0)
                     {
+                        
                         acuse.EsCancelable = "No cancelable";
+                        query.EsCancelable = "No cancelable";
 
                     }
                     else
@@ -73,10 +71,12 @@ namespace SAT.ConsultaCFDI
                                 if ((IsCancelledByTime(query) && !IsGenerericRFC(query) && !IsForeignRFC(query) && IsMore5K(query) && !IsEgresosNomina(query)) || query.EstatusCancelacion == "Solicitud rechazada")
                                 {
                                     acuse.EsCancelable = "Cancelable con aceptacion";
+                                    query.EsCancelable = "Cancelable con aceptacion";
                                 }
                                 else
                                 {
                                     acuse.EsCancelable = "Cancelable sin aceptacion";
+                                    query.EsCancelable = "Cancelable sin aceptacion";
                                 }
                             }
                             else
@@ -90,38 +90,54 @@ namespace SAT.ConsultaCFDI
                                     }
                                 }
                                 acuse.EsCancelable = "Cancelable con aceptacion";
+                                query.EsCancelable = "Cancelable con aceptacion";
                             }
                         }
                     }
-                    var updated = reception.GetDocumentByUUID(Guid.Parse(respObj.id));
+                    reception.UpdateDocument(query);
+                    var updated = reception.GetDocumentByUUID(Guid.Parse(uuid));
                     acuse.CodigoEstatus = updated.CodigoEstatus;
                     acuse.Estado = updated.Estado;
                     acuse.EstatusCancelacion = updated.EstatusCancelacion;
                 }
                 return acuse;
             }
+        }
+        public Acuse Consulta(string expresionImpresa)
+        {
+            expresionImpresa = Regex.Replace(expresionImpresa, @"\t|\n|\r", "");
+            expresionImpresa =  expresionImpresa.Replace("?","").Trim();
+            
+            var dict = HttpUtility.ParseQueryString(expresionImpresa);
+            string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
+            ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
+            var ga = addDecimals(respObj.tt);
+            respObj.tt = ga;
+
+            return GetLastUpdatedDocument(respObj.re, respObj.rr, respObj.tt, respObj.id);
+            
 
         }
 
-        private bool IsGenerericRFC(Document cfdi)
+        private static bool IsGenerericRFC(Document cfdi)
         {
             string generic_rfc = "XAXX010101000";
             return cfdi.RfcReceptor == generic_rfc;
         }
-        private bool IsForeignRFC(Document cfdi)
+        private static bool IsForeignRFC(Document cfdi)
         {
             string generic_rfc = "XEXX010101000";
             return cfdi.RfcReceptor == generic_rfc;
         }
-        private bool IsMore5K(Document cfd)
+        private static bool IsMore5K(Document cfd)
         {
             return decimal.Parse(cfd.Total) > 5000;
         }
-        private bool IsEgresosNomina(Document document)
+        private static bool IsEgresosNomina(Document document)
         {
             return document.TipoComprobante == "E" || document.TipoComprobante == "N";
         }
-        private bool IsCancelledByTime(Document doc)
+        private static bool IsCancelledByTime(Document doc)
         {
             //TODO: esto es para no esperar 10 mins, al subir poner 10
 
@@ -129,7 +145,7 @@ namespace SAT.ConsultaCFDI
             return minutes > 10;// <---- aqui
         }
 
-        private bool IsAutoCancel(Document doc)
+        private static bool IsAutoCancel(Document doc)
         {
             //TODO: esto es para no esperar 15 minutos, al subir poner 15
             using (PendingsDAO pendings = new PendingsDAO(new Database(new SQLDatabase(_connectionString))))
@@ -140,7 +156,7 @@ namespace SAT.ConsultaCFDI
                 return minutes > 15;
             }
         }
-        private DateTime GetCentralTime()
+        private static DateTime GetCentralTime()
         {
             var centralTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
             return TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now.ToUniversalTime(), centralTimeZone);

@@ -23,7 +23,7 @@ namespace SAT.ConsultaCFDI
         private string EstatusCancelacionField;
 
         [DataMember]
-        internal string CodigoEstatus
+        public string CodigoEstatus
         {
             get
             {
@@ -39,7 +39,7 @@ namespace SAT.ConsultaCFDI
         }
 
         [DataMember]
-        internal string EsCancelable
+        public string EsCancelable
         {
             get
             {
@@ -55,7 +55,7 @@ namespace SAT.ConsultaCFDI
         }
 
         [DataMember]
-        internal string Estado
+        public string Estado
         {
             get
             {
@@ -71,7 +71,7 @@ namespace SAT.ConsultaCFDI
         }
 
         [DataMember]
-        internal string EstatusCancelacion
+        public string EstatusCancelacion
         {
             get
             {
