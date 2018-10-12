@@ -24,16 +24,7 @@ namespace SAT.ConsultaCFDI
         {
             _connectionString = connectionString;
         }
-        private string addDecimals(string s)
-        {
-            string res = s;
-            if (s.Split('.').Length == 1)
-            {
-                res = res + ".00";
-            }
-           
-            return res;
-        }
+      
 
         public static Acuse GetLastUpdatedDocument(string rfcEmisor, string rfcReceptor, string total, string uuid)
         {
@@ -111,8 +102,7 @@ namespace SAT.ConsultaCFDI
             var dict = HttpUtility.ParseQueryString(expresionImpresa);
             string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
-            var ga = addDecimals(respObj.tt);
-            respObj.tt = ga;
+            
 
             return GetLastUpdatedDocument(respObj.re, respObj.rr, respObj.tt, respObj.id);
             
