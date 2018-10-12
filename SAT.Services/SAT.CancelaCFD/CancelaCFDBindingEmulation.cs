@@ -13,6 +13,7 @@ using SAT.Core.DL.DAO.Pendings;
 using SAT.Core.DL.DAO.Reception;
 using SAT.Core.DL.Implements.SQL.Repository.Entities;
 using SAT.Core.DL.DAO.Relations;
+using SAT.ConsultaCFDI;
 
 namespace SAT.CancelaCFD
 {
@@ -52,7 +53,7 @@ namespace SAT.CancelaCFD
             }
             try
             {
-               xml = XmlMessageSerializer.SerializeDocumentToXml(cancelacion);
+                xml = XmlMessageSerializer.SerializeDocumentToXml(cancelacion);
             }
             catch
             {
@@ -65,164 +66,67 @@ namespace SAT.CancelaCFD
                 return acuse;
             }
             DateTime cancelationDate = DateTime.Parse(string.Format("{0:s}", DateTime.UtcNow), CultureInfo.InvariantCulture);
-           
+
             acuse.Fecha = cancelationDate;
-            
-            if (cancelacion.Folios.Any(w => _reception.GetDocumentByUUID(Guid.Parse(w.UUID)) == null))
+            List<AcuseFolios> acuseFolios = new List<AcuseFolios>();
+            foreach (var folio in cancelacion.Folios)
             {
-                acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
-                var acusesFolios = new List<AcuseFolios>();
-                foreach (var folio in cancelacion.Folios)
+                var query = _reception.GetDocumentByUUID(Guid.Parse(folio.UUID));
+                ConsultaCFDI.Acuse data = ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor, query.RfcReceptor, query.Total, query.UUID.ToString());
+                AcuseFolios acuseFolio = new AcuseFolios();
+                acuseFolio.UUID = folio.UUID;
+                if (data == null)
+                    acuseFolio.EstatusUUID = "205";
+                else if (data.Estado == "Cancelado")
                 {
-                    if (_reception.GetDocumentByUUID(Guid.Parse(folio.UUID)) == null)
-                    {
-                        acusesFolios.Add(new AcuseFolios()
-                        {
-                            EstatusUUID = "205",
-                            UUID = folio.UUID.ToUpper()
-                        });
-                    }
-                    else
-                    {
-                        acusesFolios.Add(new AcuseFolios()
-                        {
-                            EstatusUUID = "201",
-                            UUID = folio.UUID.ToUpper()
-                        });
-                    }
-
+                    acuseFolio.EstatusUUID = "202";
                 }
-                acuse.Folios = acusesFolios.ToArray();
-
-                acuse.RfcEmisor = cancelacion.RfcEmisor;
-                acuse.Signature = cancelacion.Signature;
-                acuse.CodEstatus = "305";
-                return acuse;
-            }
-
-            if (cancelacion.Folios.Any(w => _pendings.GetPendingByUUID(Guid.Parse(w.UUID))!= null))
-            {
-                acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
-                var acusesFolios = new List<AcuseFolios>();
-                foreach (var folio in cancelacion.Folios)
+                else if (query.RfcEmisor != acuse.RfcEmisor)
                 {
-                    if (_pendings.GetPendingByUUID(Guid.Parse(folio.UUID)) != null)
-                    {
-                        acusesFolios.Add(new AcuseFolios()
-                        {
-                            EstatusUUID = "202",
-                            UUID = folio.UUID.ToUpper()
-                        });
-                    }
-                    else
-                    {
-                    acusesFolios.Add(new AcuseFolios()
-                    {
-                        EstatusUUID = "201",
-                            UUID = folio.UUID.ToUpper()
-                        });
-                    }
-
+                    acuseFolio.EstatusUUID = "203";
                 }
-                acuse.Folios = acusesFolios.ToArray();
-
-                acuse.RfcEmisor = cancelacion.RfcEmisor;
-                acuse.Signature = cancelacion.Signature;
+                else
+                {
+                    acuseFolio.EstatusUUID = "201";
+                }
+                acuseFolios.Add(acuseFolio);
+                ///Logica de negocio
                 
-                return acuse;
             }
+            acuse.Folios = acuseFolios.ToArray();
 
-            if (cancelacion.Folios.Any(w => _relations.GetRelationsParents(Guid.Parse(w.UUID))?.Count() > 0))
-            {
-                acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
-                var acusesFolios = new List<AcuseFolios>();
-                foreach (var folio in cancelacion.Folios)
-                {
-                    if (_relations.GetRelationsParents(Guid.Parse(folio.UUID)).Count() > 0)
-                    {
-                        acusesFolios.Add(new AcuseFolios()
-                        {
-                            EstatusUUID = "301",
-                            UUID = folio.UUID.ToUpper()
-                        });
-                    }
-                    else
-                    {
-                        acusesFolios.Add(new AcuseFolios()
-                        {
-                            EstatusUUID = "201",
-                            UUID = folio.UUID.ToUpper()
-                        });
-                    }
-                    
-                }
-                acuse.Folios = acusesFolios.ToArray();
-
-                acuse.RfcEmisor = cancelacion.RfcEmisor;
-                acuse.Signature = cancelacion.Signature;
-                acuse.CodEstatus = "301";
-                return acuse;
-            }
-            if (cancelacion.Folios?.Count() > 0)
-            {
-                acuse.Folios = new AcuseFolios[cancelacion.Folios.Length];
-                var acusesFolios = new List<AcuseFolios>();
-                foreach (var folio in cancelacion.Folios)
-                {
-                    var doc = _reception.GetDocumentByUUID(Guid.Parse(folio.UUID));
-                    if(doc.Estado == "Cancelado")
-                    {
-                        acusesFolios.Add(new AcuseFolios()
-                        {
-                            EstatusUUID = "202",
-                            UUID = folio.UUID.ToUpper()
-                        });
-                    }
-                    else
-                    {
-                        acusesFolios.Add(new AcuseFolios()
-                        {
-                            EstatusUUID = "201",
-                            UUID = folio.UUID.ToUpper()
-                        });
-                    }
-                    
-                }
-                acuse.Folios = acusesFolios.ToArray();
-            }
             acuse.RfcEmisor = cancelacion.RfcEmisor;
             acuse.Signature = cancelacion.Signature;
-
+            acuse.CodEstatus = null;
             CancelFolios(cancelacion.Folios);
             return acuse;
         }
-      
+
 
         private void CancelFolios(CancelacionFolios[] folios)
         {
             foreach (var f in folios)
             {
-                var doc = _reception.GetDocumentByUUID(Guid.Parse(f.UUID));
+                
+                var query = _reception.GetDocumentByUUID(Guid.Parse(f.UUID));
+                ConsultaCFDI.Acuse doc = ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor, query.RfcReceptor,query.Total, query.UUID.ToString());
+                
                 if (doc.Estado != "Cancelado")
                 {
-                    if ((IsCancelledByTime(Guid.Parse(f.UUID)) && !IsGenerericRFC(doc) && !IsForeignRFC(doc) && IsMore5K(doc) && !IsEgresosNomina(doc)) || doc.EstatusCancelacion == "Solicitud rechazada")
+                    if (doc.EsCancelable == "Cancelable con aceptacion")
                     {
                         if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID)) == null)
                         {
                             _cancelation.StartCancelDocument(Guid.Parse(f.UUID));
                             _pendings.SendPending(Guid.Parse(f.UUID));
                         }
-
                     }
-                    else
+                    else if(doc.EsCancelable == "Cancelable sin aceptacion")
                     {
-
                         _cancelation.CancelDocument(Guid.Parse(f.UUID));
                     }
-
                 }
-                
-               }
+            }
         }
 
         private bool IsGenerericRFC(Document cfdi)
