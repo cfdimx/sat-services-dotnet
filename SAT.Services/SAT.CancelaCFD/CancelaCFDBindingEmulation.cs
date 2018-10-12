@@ -121,7 +121,7 @@ namespace SAT.CancelaCFD
                             _pendings.SendPending(Guid.Parse(f.UUID));
                         }
                     }
-                    else
+                    else if(doc.EsCancelable == "Cancelable sin aceptacion")
                     {
                         _cancelation.CancelDocument(Guid.Parse(f.UUID));
                     }
