@@ -115,60 +115,31 @@ namespace SAT.CancelaCFD
             {
                 
                 var query = _reception.GetDocumentByUUID(Guid.Parse(f.UUID));
-                ConsultaCFDI.Acuse doc = ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor, query.RfcReceptor,query.Total, query.UUID.ToString());
-                
-                if (doc.Estado != "Cancelado")
+                if (query != null)
                 {
-                    if (doc.EsCancelable == "Cancelable con aceptacion")
+                    ConsultaCFDI.Acuse doc = ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor, query.RfcReceptor, query.Total, query.UUID.ToString());
+
+                    if (doc.Estado != "Cancelado")
                     {
-                        if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID)) == null)
+                        if (doc.EsCancelable == "Cancelable con aceptacion")
                         {
-                            _cancelation.StartCancelDocument(Guid.Parse(f.UUID));
-                            _pendings.SendPending(Guid.Parse(f.UUID));
+                            if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID)) == null)
+                            {
+                                _cancelation.StartCancelDocument(Guid.Parse(f.UUID));
+                                _pendings.SendPending(Guid.Parse(f.UUID));
+                            }
+                        }
+                        else if (doc.EsCancelable == "Cancelable sin aceptacion")
+                        {
+                            _cancelation.CancelDocument(Guid.Parse(f.UUID));
                         }
                     }
-                    else if(doc.EsCancelable == "Cancelable sin aceptacion")
-                    {
-                        _cancelation.CancelDocument(Guid.Parse(f.UUID));
-                    }
                 }
+                
             }
         }
 
-        private bool IsGenerericRFC(Document cfdi)
-        {
-            string generic_rfc = "XAXX010101000";
-            return cfdi.RfcReceptor == generic_rfc;
-        }
-        private bool IsForeignRFC(Document cfdi)
-        {
-            string generic_rfc = "XEXX010101000";
-            return cfdi.RfcReceptor == generic_rfc;
-        }
-        private bool IsMore5K(Document cfd)
-        {
-            return decimal.Parse(cfd.Total) > 5000;
-        }
-        private bool IsEgresosNomina(Document document)
-        {
-            return document.TipoComprobante == "E" || document.TipoComprobante == "N";
-        }
-
-        private bool IsCancelledByTime(Guid uuid)
-        {
-            var doc = _reception.GetDocumentByUUID(uuid);
-            var minutes = (int)(GetCentralTime() - doc.FechaEmision).TotalMinutes;
-            return minutes > 10;
-        }
-
-
-        private DateTime GetCentralTime()
-        {
-            var centralTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Central Standard Time (Mexico)");
-            return TimeZoneInfo.ConvertTimeFromUtc(DateTime.Now.ToUniversalTime(), centralTimeZone);
-        }
-
-
+       
 
     }
 }
