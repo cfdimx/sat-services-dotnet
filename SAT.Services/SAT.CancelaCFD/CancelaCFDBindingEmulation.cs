@@ -72,23 +72,29 @@ namespace SAT.CancelaCFD
             foreach (var folio in cancelacion.Folios)
             {
                 var query = _reception.GetDocumentByUUID(Guid.Parse(folio.UUID));
-                ConsultaCFDI.Acuse data = ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor, query.RfcReceptor, query.Total, query.UUID.ToString());
                 AcuseFolios acuseFolio = new AcuseFolios();
                 acuseFolio.UUID = folio.UUID;
-                if (data == null)
-                    acuseFolio.EstatusUUID = "205";
-                else if (data.Estado == "Cancelado")
+                if (query != null)
                 {
-                    acuseFolio.EstatusUUID = "202";
-                }
-                else if (query.RfcEmisor != acuse.RfcEmisor)
-                {
-                    acuseFolio.EstatusUUID = "203";
+                    ConsultaCFDI.Acuse data = ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor, query.RfcReceptor, query.Total, query.UUID.ToString());
+                    if (data.Estado == "Cancelado")
+                    {
+                        acuseFolio.EstatusUUID = "202";
+                    }
+                    else if (query.RfcEmisor != acuse.RfcEmisor)
+                    {
+                        acuseFolio.EstatusUUID = "203";
+                    }
+                    else
+                    {
+                        acuseFolio.EstatusUUID = "201";
+                    }
                 }
                 else
                 {
-                    acuseFolio.EstatusUUID = "201";
+                    acuseFolio.EstatusUUID = "205";
                 }
+                
                 acuseFolios.Add(acuseFolio);
                 ///Logica de negocio
                 
