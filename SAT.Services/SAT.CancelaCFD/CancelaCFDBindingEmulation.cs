@@ -73,7 +73,7 @@ namespace SAT.CancelaCFD
             {
                 var query = _reception.GetDocumentByUUID(Guid.Parse(folio.UUID));
                 AcuseFolios acuseFolio = new AcuseFolios();
-                acuseFolio.UUID = folio.UUID;
+                acuseFolio.UUID = folio.UUID.ToUpper();
                 if (query != null)
                 {
                     ConsultaCFDI.Acuse data = ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor, query.RfcReceptor, query.Total, query.UUID.ToString());
