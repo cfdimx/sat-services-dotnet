@@ -48,7 +48,7 @@ namespace SAT.CancelaCFD
             }
             if (!Sign.IsValidIssuer(certificate, cancelacion.RfcEmisor))
             {
-                acuse.CodEstatus = "203";
+                acuse.CodEstatus = "303";
                 return acuse;
             }
             try
@@ -132,6 +132,7 @@ namespace SAT.CancelaCFD
                         else if (doc.EsCancelable == "Cancelable sin aceptacion")
                         {
                             _cancelation.CancelDocument(Guid.Parse(f.UUID));
+                            
                         }
                     }
                 }
