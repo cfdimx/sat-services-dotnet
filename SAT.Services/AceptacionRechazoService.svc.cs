@@ -8,6 +8,7 @@ using System.Text;
 using SAT.AceptacionRechazo;
 using SAT.Core.DL.DAO.Cancelation;
 using SAT.Core.DL.DAO.Pendings;
+using SAT.Core.DL.DAO.Reception;
 using SAT.Core.DL.Implements.SQL;
 
 namespace SAT.Services
@@ -28,7 +29,8 @@ namespace SAT.Services
             SAT.Core.DL.Database _sql = new SAT.Core.DL.Database(new SQLDatabase(emulation_db));
             pendings = new PendingsDAO(_sql);
             cancelation = new CancelationDAO(_sql);
-            _service = new CancelationAceptacionRechazoServiceEmulation(pendings, cancelation);
+            ReceptionDAO reception = new ReceptionDAO(_sql);
+            _service = new CancelationAceptacionRechazoServiceEmulation(pendings, cancelation, reception);
         }
         public AcuseAceptacionRechazo ProcesarRespuesta(SolicitudAceptacionRechazo solicitud)
         {
