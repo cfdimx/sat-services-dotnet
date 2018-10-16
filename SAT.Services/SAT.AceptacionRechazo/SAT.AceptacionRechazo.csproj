@@ -61,6 +61,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\SAT.ConsultaCFDI\SAT.ConsultaCFDI.csproj">
+      <Project>{bb5cd776-c385-4684-9d5e-657afe2df06e}</Project>
+      <Name>SAT.ConsultaCFDI</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SAT.Core\SAT.Core.csproj">
       <Project>{555b51d8-9bf2-4e27-b9e0-89ac2845d563}</Project>
       <Name>SAT.Core</Name>
