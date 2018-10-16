@@ -1,5 +1,6 @@
 using SAT.Core.DL.DAO.Cancelation;
 using SAT.Core.DL.DAO.Pendings;
+using SAT.Core.DL.DAO.Reception;
 using SAT.Core.Helpers;
 using System;
 using System.Collections.Generic;
@@ -16,10 +17,12 @@ namespace SAT.AceptacionRechazo
     {
         PendingsDAO _pendings;
         CancelationDAO _cancelation;
-        public CancelationAceptacionRechazoServiceEmulation(PendingsDAO pendings, CancelationDAO cancelation)
+        ReceptionDAO _reception;
+        public CancelationAceptacionRechazoServiceEmulation(PendingsDAO pendings, CancelationDAO cancelation, ReceptionDAO reception)
         {
             _pendings = pendings;
             _cancelation = cancelation;
+            _reception = reception;
         }
 
         public AcusePeticionesPendientes ObtenerPeticionesPendientes(string rfcReceptor)
@@ -123,9 +126,31 @@ namespace SAT.AceptacionRechazo
                 List<AcuseAceptacionRechazoFolios> folios = new List<AcuseAceptacionRechazoFolios>();
                 foreach (var f in solicitud.Folios)
                 {
+
+                    var query = _reception.GetDocumentByUUID(Guid.Parse(f.UUID));
+                    var data = ConsultaCFDI.ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor,query.RfcReceptor,query.Total,query.UUID.ToString());
                     f.UUID = f.UUID.ToUpper();
-                    ExecuteAction(f);
-                    folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
+                    if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID))!= null)
+                    {
+                        if (data.Estado != "Cancelado" && data.EstatusCancelacion != "Solicitud rechazada")
+                        {
+                            folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1002", Respuesta = f.Respuesta.ToString() });
+                        }
+                       
+                        else
+                        {
+                            ExecuteAction(f);
+                            folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
+                        }
+                    }
+                    else
+                    {
+                        folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1001", Respuesta = f.Respuesta.ToString() });
+                    }
+                    
+                    
+                   
+                    
                 }
                 ar.Folios = folios.ToArray();
                 ar.Signature = solicitud.Signature;

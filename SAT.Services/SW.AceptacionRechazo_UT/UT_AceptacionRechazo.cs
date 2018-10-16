@@ -34,7 +34,7 @@ namespace SAT.AceptacionRechazo_UT
             _pendings = PendingsDAO.Instance(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
             _reception = new ReceptionDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
             _relations = new RelationsDAO(new SAT.Core.DL.Database(new SQLDatabase(Environment.GetEnvironmentVariable("EMULATION_DB"))));
-            _service = new CancelationAceptacionRechazoServiceEmulation(_pendings, _cancelation);
+            _service = new CancelationAceptacionRechazoServiceEmulation(_pendings, _cancelation, _reception);
             _receptionService = new RecibeServiceEmulation(Environment.GetEnvironmentVariable("EMULATION_DB"), Environment.GetEnvironmentVariable("EMULATION_SAS"));
             _solicitud = Core.Helpers.XmlHelper.DeserealizeDocument<SolicitudAceptacionRechazo>(Core.Helpers.XmlHelper.RemoveInvalidCharsXml(solicitudXML));
         }

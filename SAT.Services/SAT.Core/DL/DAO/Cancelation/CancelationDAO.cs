@@ -26,7 +26,7 @@ namespace SAT.Core.DL.DAO.Cancelation
             doc.Estado = "Cancelado";
 
             _db.Update(doc);
-            _db.Save();
+            
             var relations = _db.GetRelationsChildren(uuid);
             if (relations != null)
             {
@@ -35,6 +35,7 @@ namespace SAT.Core.DL.DAO.Cancelation
                     _db.DeleteRelations(r);
                 }
             }
+            
             _db.Save();
         }
 
