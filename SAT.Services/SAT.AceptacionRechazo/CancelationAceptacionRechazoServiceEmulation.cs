@@ -128,25 +128,33 @@ namespace SAT.AceptacionRechazo
                 {
 
                     var query = _reception.GetDocumentByUUID(Guid.Parse(f.UUID));
-                    var data = ConsultaCFDI.ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor,query.RfcReceptor,query.Total,query.UUID.ToString());
-                    f.UUID = f.UUID.ToUpper();
-                    if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID))!= null)
+                    if (query != null)
                     {
-                        if (data.Estado != "Cancelado" && data.EstatusCancelacion != "Solicitud rechazada")
+                        var data = ConsultaCFDI.ConsultaCFDIServiceEmulation.GetLastUpdatedDocument(query.RfcEmisor, query.RfcReceptor, query.Total, query.UUID.ToString());
+                        f.UUID = f.UUID.ToUpper();
+                        if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID)) != null)
                         {
-                            folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1002", Respuesta = f.Respuesta.ToString() });
+                            if (data.Estado != "Cancelado" && data.EstatusCancelacion != "Solicitud rechazada")
+                            {
+                                folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1002", Respuesta = f.Respuesta.ToString() });
+                            }
+
+                            else
+                            {
+                                ExecuteAction(f);
+                                folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
+                            }
                         }
-                       
                         else
                         {
-                            ExecuteAction(f);
-                            folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1000", Respuesta = f.Respuesta.ToString() });
+                            folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1001", Respuesta = f.Respuesta.ToString() });
                         }
                     }
                     else
                     {
-                        folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1001", Respuesta = f.Respuesta.ToString() });
+                        folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1005", Respuesta = f.Respuesta.ToString() });
                     }
+                    
                     
                     
                    
