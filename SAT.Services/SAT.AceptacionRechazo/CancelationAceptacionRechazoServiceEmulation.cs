@@ -134,7 +134,7 @@ namespace SAT.AceptacionRechazo
                         f.UUID = f.UUID.ToUpper();
                         if (_pendings.GetPendingByUUID(Guid.Parse(f.UUID)) != null)
                         {
-                            if (data.Estado != "Cancelado" && data.EstatusCancelacion != "Solicitud rechazada")
+                            if (data.Estado == "Cancelado" || data.EstatusCancelacion == "Solicitud rechazada")
                             {
                                 folios.Add(new AcuseAceptacionRechazoFolios { UUID = f.UUID, EstatusUUID = "1002", Respuesta = f.Respuesta.ToString() });
                             }
