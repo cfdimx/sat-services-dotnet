@@ -44,12 +44,15 @@ namespace SAT.ConsultaCFDI
                 }
                 using (RelationsDAO relations = new RelationsDAO(new Database(new SQLDatabase(_connectionString))))
                 {
-
-                    if (relations.GetRelationsParents(query.UUID).ToArray().Length > 0)
+                    var relas = relations.GetRelationsParents(query.UUID).ToArray();
+                    if (relas.Length > 0)
                     {
-                        
-                        acuse.EsCancelable = "No cancelable";
-                        query.EsCancelable = "No cancelable";
+                        if (relas.Any(w => reception.GetDocumentByUUID(w.ParentUUID)?.Estado != "Cancelado" || reception.GetDocumentByUUID(w.ParentUUID)?.TipoComprobante == "P"))
+                        {
+                            acuse.EsCancelable = "No cancelable";
+                            query.EsCancelable = "No cancelable";
+                        }
+                       
 
                     }
                     else

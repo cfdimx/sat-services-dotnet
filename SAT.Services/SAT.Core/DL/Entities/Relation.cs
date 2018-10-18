@@ -16,5 +16,6 @@ namespace SAT.Core.DL.Entities
         public Guid UUID { get; set; }
         public Guid ParentUUID { get; set; }
         public string RelationType { get; set; }
+        public string DocumentType { get; set; }
     }
 }
