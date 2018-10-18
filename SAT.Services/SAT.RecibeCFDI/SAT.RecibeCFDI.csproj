@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="IRecibeServiceEmulation.cs" />
     <Compile Include="Models\Models.cs" />
+    <Compile Include="Models\Pagos10.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecibeServiceEmulation.cs" />
   </ItemGroup>

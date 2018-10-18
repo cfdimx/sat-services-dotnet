@@ -87,6 +87,7 @@ namespace SAT.RecibeCFDI
             string rfc_emisor = root["cfdi:Emisor"].GetAttribute("Rfc");
             string rfc_receptor = root["cfdi:Receptor"].GetAttribute("Rfc");
             string total = root.GetAttribute("Total");
+            string tipoComprobante = root.GetAttribute("TipoDeComprobante");
             string uuid = root["cfdi:Complemento"]["tfd:TimbreFiscalDigital"].GetAttribute("UUID");
             string tipo_comprobante = root.GetAttribute("TipoDeComprobante");
             string noCertificado = root.GetAttribute("NoCertificado");
@@ -101,8 +102,17 @@ namespace SAT.RecibeCFDI
 
                 if (RelationsUUIDS.Length != 0)
                 {
-                    SaveRelations(RelationsType, uuid, RelationsUUIDS);
+                    SaveRelations(RelationsType, tipoComprobante, uuid, RelationsUUIDS);
                 }
+
+                
+            }
+            //pagos
+            var pago = root["cfdi:Complemento"]["pago10:Pagos"];
+            if (pago != null)
+            {
+                var payRel = GetPayRelations(pago.OuterXml);
+                SaveRelations("01", tipoComprobante, uuid, payRel);
             }
 
             using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
@@ -154,15 +164,31 @@ namespace SAT.RecibeCFDI
 
 
 
-        private void SaveRelations(string relationType, string parentUUID, string[] uuids)
+        private void SaveRelations(string relationType,string documentType, string parentUUID, string[] uuids)
         {
             using(RelationsDAO relations = new RelationsDAO(new Database(new SQLDatabase(_connectionString))))
             {
                 foreach (string uuid in uuids)
                 {
-                    relations.SaveRelations(Guid.Parse(uuid), Guid.Parse(parentUUID), relationType);
+                    relations.SaveRelations(Guid.Parse(uuid), Guid.Parse(parentUUID), relationType, documentType);
                 }
             }
+        }
+
+        public string[] GetPayRelations(string xml)
+        {
+            List<string> relas = new List<string>();
+            var pagos = Core.Helpers.XmlHelper.DeserealizeDocument<Pagos>(xml);
+            foreach (var p in pagos.Pago)
+            {
+                foreach (var dr in p.DoctoRelacionado)
+                {
+                    relas.Add(dr.IdDocumento);
+                }
+            }
+
+            return relas.ToArray();
+           
         }
 
         private string[] GetRelations(XmlNodeList relations)

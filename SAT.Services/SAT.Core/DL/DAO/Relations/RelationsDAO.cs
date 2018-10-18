@@ -33,7 +33,7 @@ namespace SAT.Core.DL.DAO.Relations
             return _instance;
         }
 
-        public bool SaveRelations(Guid uuid, Guid parentUUID, string relationType)
+        public bool SaveRelations(Guid uuid, Guid parentUUID, string relationType, string documentType)
         {
             try
             {
@@ -41,7 +41,8 @@ namespace SAT.Core.DL.DAO.Relations
                 {
                     UUID = uuid,
                     ParentUUID = parentUUID,
-                    RelationType = relationType
+                    RelationType = relationType,
+                    DocumentType = documentType
                 };
 
                 _db.SaveRelation(relation);
@@ -62,10 +63,7 @@ namespace SAT.Core.DL.DAO.Relations
 
                 foreach (var rel in _db.GetRelationsParents(uuid))
                 {
-                    if(_db.GetDocumentByUUID(rel.ParentUUID).Estado == "Vigente")
-                    {
-                        rels.Add(rel);
-                    }
+                    rels.Add(rel);
                 }
                 return rels;
             }
