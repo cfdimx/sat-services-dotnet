@@ -47,13 +47,22 @@ namespace SAT.ConsultaCFDI
                     var relas = relations.GetRelationsParents(query.UUID).ToArray();
                     if (relas.Length > 0)
                     {
-                        //if (relas.Any(w => reception.GetDocumentByUUID(w.ParentUUID)?.Estado != "Cancelado" || reception.GetDocumentByUUID(w.ParentUUID)?.TipoComprobante == "P"))
-                        //{
 
-                        //}
+                        if (relas.Any(w => {
+                            var d = reception.GetDocumentByUUID(w.ParentUUID);
+                            if (d != null)
+                            {
+                                return d.Estado != "Cancelado" || d.TipoComprobante == "P";
+                            }
 
-                        acuse.EsCancelable = "No cancelable";
-                        query.EsCancelable = "No cancelable";
+                            return false;
+                        }))
+                        {
+                            acuse.EsCancelable = "No cancelable";
+                            query.EsCancelable = "No cancelable";
+                        }
+
+
 
 
                     }
