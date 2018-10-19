@@ -83,7 +83,9 @@ namespace SAT.ConsultaCFDI
                                     using (CancelationDAO cancelation = new CancelationDAO(new Database(new SQLDatabase(_connectionString))))
                                     {
                                         cancelation.CancelDocument(query.UUID);
+                                        
                                         pendings.DeletePending(query.UUID);
+                                        query.Estado = "Cancelado";
                                     }
                                 }
                                 acuse.EsCancelable = "Cancelable con aceptacion";
