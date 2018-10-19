@@ -181,10 +181,18 @@ namespace SAT.RecibeCFDI
             var pagos = Core.Helpers.XmlHelper.DeserealizeDocument<Pagos>(xml);
             foreach (var p in pagos.Pago)
             {
-                foreach (var dr in p.DoctoRelacionado)
+                if (p.DoctoRelacionado != null)
                 {
-                    relas.Add(dr.IdDocumento);
+                    foreach (var dr in p.DoctoRelacionado)
+                    {
+                        if (!string.IsNullOrEmpty(dr.IdDocumento))
+                        {
+                            relas.Add(dr.IdDocumento);
+                        }
+                        
+                    }
                 }
+                
             }
 
             return relas.ToArray();
