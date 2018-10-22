@@ -86,6 +86,7 @@ namespace SAT.ConsultaCFDI
                                         
                                         pendings.DeletePending(query.UUID);
                                         query.Estado = "Cancelado";
+                                        query.EstatusCancelacion = null;
                                     }
                                 }
                                 acuse.EsCancelable = "Cancelable con aceptacion";
