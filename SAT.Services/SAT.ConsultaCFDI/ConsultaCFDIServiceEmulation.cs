@@ -106,7 +106,7 @@ namespace SAT.ConsultaCFDI
         public Acuse Consulta(string expresionImpresa)
         {
             expresionImpresa = Regex.Replace(expresionImpresa, @"\t|\n|\r", "");
-            expresionImpresa = expresionImpresa.Replace("&", "%26").Trim();
+            expresionImpresa = expresionImpresa.Replace("&amp;", "%26").Trim();
             expresionImpresa =  expresionImpresa.Replace("?","").Trim();
             
             var dict = HttpUtility.ParseQueryString(expresionImpresa);
