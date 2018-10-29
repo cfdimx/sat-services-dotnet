@@ -15,7 +15,7 @@ namespace SAT.Core.DL
         void Save();
         void Delete(IEntity document);
         DocumentBase GetDocument(Guid uuid);
-        DocumentBase GetDocumentbyParams(Guid uuid, string total, string rfcReceptor, string rfcEmisor);
+        DocumentBase GetDocumentbyParams(Guid uuid, decimal total, string rfcReceptor, string rfcEmisor);
         void SaveRelation(IEntity document);
         void UpdateRelation(IEntity document);
         void DeleteRelation(IEntity document);

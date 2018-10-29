@@ -22,7 +22,7 @@ namespace SAT.Core.DL
         {
             return _db.GetDocument(uuid);
         }
-        public DocumentBase GetDocument(Guid uuid, string total, string rfcReceptor, string rfcEmisor)
+        public DocumentBase GetDocument(Guid uuid, decimal total, string rfcReceptor, string rfcEmisor)
         {
             return _db.GetDocumentbyParams(uuid, total,rfcReceptor, rfcEmisor);
         }

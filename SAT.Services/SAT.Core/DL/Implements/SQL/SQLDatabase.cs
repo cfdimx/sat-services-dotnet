@@ -28,9 +28,9 @@ namespace SAT.Core.DL.Implements.SQL
             return _db.GetAll(w => w.UUID == uuid).FirstOrDefault();
         }
 
-        public DocumentBase GetDocumentbyParams(Guid uuid, string total, string rfcReceptor, string rfcEmisor)
+        public DocumentBase GetDocumentbyParams(Guid uuid, decimal total, string rfcReceptor, string rfcEmisor)
         {
-            var data = _db.GetAll(w => w.UUID == uuid && w.Total == total && w.RfcReceptor == rfcReceptor && w.RfcEmisor == rfcEmisor);
+           
             return _db.GetAll(w => w.UUID == uuid && w.Total == total && w.RfcReceptor == rfcReceptor && w.RfcEmisor == rfcEmisor).FirstOrDefault();
         }
 
