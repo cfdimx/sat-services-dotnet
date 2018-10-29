@@ -62,6 +62,15 @@ namespace SAT.CfdiConsultaRelacionados
 
 
                     var taxIdInfo = SignatureHelper.CertificateGetInfoTaxId(certificate);
+                    var d =  _receptions.GetDocumentByUUID(Guid.Parse(solicitud.Uuid));
+                    if (taxIdInfo.taxId != d.RfcReceptor)
+                    {
+                        return new ConsultaRelacionados()
+                        {
+                            UuidConsultado = solicitud.Uuid,
+                            Resultado = $"WS Consulta CFDI relacionados RfcReceptor: {solicitud.RfcReceptor} - UUID: {solicitud.Uuid} - Clave: 2002 - Error: El RFC no corresponde al UUID consultado."
+                        };
+                    }
 
                     if (certificate != null && taxIdInfo.taxId != solicitud.RfcReceptor)
                         return new ConsultaRelacionados()

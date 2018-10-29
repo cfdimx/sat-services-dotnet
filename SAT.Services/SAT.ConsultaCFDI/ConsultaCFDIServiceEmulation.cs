@@ -26,7 +26,7 @@ namespace SAT.ConsultaCFDI
         }
       
 
-        public static Acuse GetLastUpdatedDocument(string rfcEmisor, string rfcReceptor, string total, string uuid)
+        public static Acuse GetLastUpdatedDocument(string rfcEmisor, string rfcReceptor, decimal total, string uuid)
         {
 
             using (ReceptionDAO reception = new ReceptionDAO(new Database(new SQLDatabase(_connectionString))))
@@ -113,7 +113,7 @@ namespace SAT.ConsultaCFDI
             ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
             
 
-            return GetLastUpdatedDocument(respObj.re, respObj.rr, respObj.tt, respObj.id);
+            return GetLastUpdatedDocument(respObj.re, respObj.rr, decimal.Parse(respObj.tt), respObj.id);
             
 
         }
@@ -130,7 +130,7 @@ namespace SAT.ConsultaCFDI
         }
         private static bool IsMore5K(Document cfd)
         {
-            return decimal.Parse(cfd.Total) > 5000;
+            return cfd.Total > 5000;
         }
         private static bool IsEgresosNomina(Document document)
         {

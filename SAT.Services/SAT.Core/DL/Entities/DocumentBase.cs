@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,7 +19,7 @@ namespace SAT.Core.DL.Entities
         public string EstatusCancelacion { get; set; }
         
         public string TipoComprobante { get; set; }
-        public string Total { get; set; }
+        public decimal Total { get; set; }
         public string RfcReceptor { get; set; }
         public string RfcEmisor { get; set; }
         public string VersionComprobante { get; set; }

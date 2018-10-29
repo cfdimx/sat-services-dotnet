@@ -39,7 +39,7 @@ namespace SAT.Core.DL.DAO.Reception
             return (Document)_db.GetDocumentByUUID(uuid);
         }
 
-        public Document ConsultaCFDI(string total, Guid uuid, string rfcReceptor, string rfcEmisor)
+        public Document ConsultaCFDI(decimal total, Guid uuid, string rfcReceptor, string rfcEmisor)
         {
             return (Document)_db.GetDocument(uuid,total, rfcReceptor, rfcEmisor);
         }
@@ -67,6 +67,7 @@ namespace SAT.Core.DL.DAO.Reception
         {
             try
             {
+                decimal t = decimal.Parse(total);
                 Document doc = new Document()
                 {
                     XmlUrl = xmlUrl,
@@ -76,7 +77,7 @@ namespace SAT.Core.DL.DAO.Reception
                     EstatusCancelacion = estatusCancelacion,
                     UUID = uuid,
                     TipoComprobante = tipoComprobante,
-                    Total = total,
+                    Total = t,
                     RfcReceptor = rfcReceptor,
                     RfcEmisor = rfcEmisor,
                     VersionComprobante = versionComprobante,
