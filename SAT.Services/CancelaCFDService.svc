@@ -1,0 +1,1 @@
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="SAT.Services.CancelaCFDBinding" CodeBehind="CancelaCFDBinding.svc.cs" %>
