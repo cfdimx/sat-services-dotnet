@@ -106,15 +106,19 @@ namespace SAT.ConsultaCFDI
         public Acuse Consulta(string expresionImpresa)
         {
             expresionImpresa = Regex.Replace(expresionImpresa, @"\t|\n|\r", "");
-            expresionImpresa = expresionImpresa.Replace("&amp;", "%26").Trim();
-            expresionImpresa =  expresionImpresa.Replace("?","").Trim();
             
-            var dict = HttpUtility.ParseQueryString(expresionImpresa);
-            string json = JsonConvert.SerializeObject(dict.Cast<string>().ToDictionary(k => k, v => dict[v]));
-            ExpresionImpresa respObj = JsonConvert.DeserializeObject<ExpresionImpresa>(json);
+            expresionImpresa =  expresionImpresa.Replace("?","").Trim();
+            string rfcReceptor = Regex.Match(expresionImpresa, @"rr=(.+?)&tt").Groups[1].Value;
+            string rfcEmisor = Regex.Match(expresionImpresa, @"re=(.+?)&rr").Groups[1].Value;
+            string total = Regex.Match(expresionImpresa, @"tt=(.+?)&id").Groups[1].Value;
+
+            string uuid = expresionImpresa.Split(new[] { "id=" }, StringSplitOptions.None)[1];
+
+
+        
             
 
-            return GetLastUpdatedDocument(respObj.re, respObj.rr, decimal.Parse(respObj.tt), respObj.id);
+            return GetLastUpdatedDocument(rfcEmisor, rfcReceptor, decimal.Parse(total), uuid);
             
 
         }
